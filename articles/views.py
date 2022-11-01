@@ -1,16 +1,23 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Review,Comment,Search,Photo
 from .forms import ReviewForm, CommentForm, PhotoForm
+
+
 def index(request):
-    return render(request, 'articles/index.html')
+    review = Review.objects.all()
+    context ={
+        "review":review,
+    }
+    return render(request, 'articles/index.html',context)
 
 def create(request):
     if request.method == "POST":
         review_form = ReviewForm(request.POST, request.FILES)
         photo_form = PhotoForm(request.POST, request.FILES)
         images = request.FILES.getlist('image')
-        if review.is_valid() and photo_form.is_valid():
+        if review_form.is_valid() and photo_form.is_valid():
             review = review_form.save(commit=False)
+            review.user = request.user
             if len(images):
                 for image in images:
                     image_instance = Photo(review=review, image=image)
@@ -45,8 +52,9 @@ def detail(request, pk):
             "count": review.like_users.count,
             "comment_form":comment_form,
             "comments":comments,
+            "photos":photos,
     }
-    return render(request, "reviews/detail.html", context)
+    return render(request, "articles/detail.html", context)
 def update(request, pk):
     review = Review.objects.get(pk=pk)
     photos = Photo.objects.filter(review_id=review.pk)

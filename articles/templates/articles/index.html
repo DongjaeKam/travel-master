@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>확인</h1>
+  {% for r in review %}
+    <a href="{% url 'articles:review_detail' r.pk %}">{{r.title}}</a>
+    {{r.content}}
+    {{r.place}}
+    {{r.theme}}
+    <br>
+  {% endfor %}
+
 {% endblock %}
