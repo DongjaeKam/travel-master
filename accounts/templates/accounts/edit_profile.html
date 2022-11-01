@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{user}} 프로필</h1>
+<form action="" method="POST" method="POST" enctype="multipart/form-data">
+    <p>username : {{user.username}}</p>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div style = 'margin:10px; margin-right:5px;'>
+        <div class="img_input">
+          <p>image</p>
+        </div>
+        {% if user.profile_image %}
+            <img style="width:200px; height:200px;" id="preview-image" src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image">
+        {% else %}
+            <img style="width:200px; height:200px;" id="preview-image" src="user.profile_image.url">
+        {% endif %}
+        <input style="display: block;" type="file" id="input-image" name="image">
+    </div>
+
+    <script>
+        function readImage(input) {
+          // 인풋 태그에 파일이 있는 경우
+          if(input.files && input.files[0]) {
+              // 이미지 파일인지 검사 (생략)
+              // FileReader 인스턴스 생성
+              const reader = new FileReader()
+              // 이미지가 로드가 된 경우
+              reader.onload = e => {
+                  const previewImage = document.getElementById("preview-image")
+                  previewImage.src = e.target.result
+              }
+              // reader가 이미지 읽도록 하기
+              reader.readAsDataURL(input.files[0])
+          }
+      }
+      // input file에 change 이벤트 부여
+      const inputImage = document.getElementById("input-image")
+      inputImage.addEventListener("change", e => {
+          readImage(e.target)
+      })
+      </script>
+
+
+
+    <input type="submit" value="수정">
+    <input type="submit" value="취소">
+</form>
+
+{% endblock content %}
