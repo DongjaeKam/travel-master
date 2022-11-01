@@ -3,4 +3,8 @@ from . import views
 
 app_name = "articles"
 
-urlpatterns = []
+urlpatterns = [
+
+    
+
+]
