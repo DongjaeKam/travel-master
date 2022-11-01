@@ -1,6 +1,6 @@
 from cProfile import label
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 
 class CustomUserModel(UserCreationForm):
   class Meta:
@@ -25,4 +25,19 @@ class CustomUserModel(UserCreationForm):
       'first_name' : '이름',
       'last_name' : '성',
       'profile_image' : '프로필 이미지',
+    }
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+  password = None
+
+  class Meta:
+      model = get_user_model()
+      fields = ['profile_name','email','first_name','last_name']
+      labels = {
+      'profile_name' : '닉네임',
+      'email' : '이메일 ',
+      'first_name' : '이름',
+      'last_name' : '성',
     }
