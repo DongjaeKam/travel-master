@@ -13,11 +13,9 @@
             <p>아이디 : {{user.username}}</p>
             {% csrf_token %}
             {{ form.as_p }}
+            {{ password_form.as_p }}
             <a href = "{% url 'accounts:change_password' %}" >비밀번호 변경</a>
         </div>
-
-        
-
     </div>
     
         

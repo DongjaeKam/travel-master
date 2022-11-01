@@ -77,11 +77,14 @@ def edit_profile(request):
 
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST ,instance=request.user)
+
         if form.is_valid():
             user = form.save()  
-            user.profile_image =request.FILES['profile_image']
-            user.save()
-            return redirect('accounts:my_profile')
+            if request.FILES :
+              user.profile_image =request.FILES['image']
+              user.save()
+
+            return redirect('accounts:index')
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {
@@ -89,7 +92,7 @@ def edit_profile(request):
     }
 
     return render(request,'accounts/edit_profile.html',context)
-    
+
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -97,7 +100,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('index')
+            return redirect('accounts:index')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
