@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.profile_name }}님의 페이지{% endblock title %}
+
+{% block content %}
+<section class="detail-user">
+  <h1 class='text-center'>{{ user.profile_name }}님의 페이지</h1>
+  <div class="detail-user-info">
+    <img class="detail-user-image" src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}">
+    <div class='detail-user-words'>
+      <h3 class='detail-user-cate'>닉네임: {{ user.profile_name }}</h3>
+      <h3 class='detail-user-cate'>유저 등급: {{ user.rank }}</h3>
+      <h3 class='detail-user-cate'>이메일 주소: {{ user.email }}</h3>
+      <h3 class='detail-user-cate'>유저 이름: {{ user.last_name }} {{ user.first_name }} </h3>
+      <h3 class='detail-user-cate'>가입한 날짜: {{ user.date_joined.date }}</h3>
+
+      <a class="btn btn-primary" href="{% url 'accounts:index' %}" role="button">뒤로가기</a>
+      <a class="btn btn-outline-danger" href="#" role="button">회원 정보 수정</a>
+    </div>
+  </div>
+</section>  
+{% endblock content %}
