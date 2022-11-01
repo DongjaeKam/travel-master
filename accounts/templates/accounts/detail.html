@@ -13,10 +13,62 @@
       <h3 class='detail-user-cate'>이메일 주소: {{ user.email }}</h3>
       <h3 class='detail-user-cate'>유저 이름: {{ user.last_name }} {{ user.first_name }} </h3>
       <h3 class='detail-user-cate'>가입한 날짜: {{ user.date_joined.date }}</h3>
-
       <a class="btn btn-primary" href="{% url 'accounts:index' %}" role="button">뒤로가기</a>
+      {% if request.user == user %}
       <a class="btn btn-outline-danger" href="#" role="button">회원 정보 수정</a>
+      {% endif %}
     </div>
   </div>
-</section>  
+</section>
+
+<section class="follow my-5 d-flex flex-column align-items-center">
+  <div class="btn">
+  {% if request.user != user %}
+  {% if request.user not in followers %}
+  <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-success">Follow</button>
+  {% else %}
+  <button type="button" id="follow-btn" data-user-id="{{ user.pk }}" class="btn btn-outline-danger">Unfollow</button>
+  {% endif %}
+  {% endif %}
+  </div>
+  <div id="follow-cnt">
+    <h3 class="follow">Followers : {{ followers.count }}</h3>
+    <h3 class="follow">Followings : {{ followings.count }}</h3>
+  </div>
+</section>
 {% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+{% comment %} following 기능 {% endcomment %}
+<script>
+  const followBtn = document.querySelector('#follow-btn')
+
+  followBtn.addEventListener('click', function(event) {
+    axios({
+      method: 'get',
+      url: `/accounts/${event.target.dataset.userId}/follow/`
+    })
+    .then(response => {
+      console.log(response.data)
+      if (response.data.isFollowing === true) {
+        event.target.classList.add('btn-outline-danger')
+        followBtn.innerText = 'Unfollow'
+        event.target.classList.remove('btn-outline-success')
+      } else {
+        event.target.classList.add('btn-outline-success')
+        followBtn.innerText = 'Follow'
+        event.target.classList.remove('btn-outline-danger')
+      }
+
+      const followCnt = document.querySelector('#follow-cnt')
+      followCnt.innerHTML = `
+        <h3 class="follow">Followers : ${ response.data.followers }</h3>
+        <h3 class="follow">Followings : ${ response.data.followings }</h3>
+      `
+    })
+  })
+
+</script>
+{% endblock script %}
