@@ -6,8 +6,10 @@
 <form action="" method="POST" method="POST" enctype="multipart/form-data">
     <div class = 'd-flex' style="margin-top:10px;">
         <div style = 'margin:10px; margin-right:5px;'>
-            <img style="width:200px; height:200px;" id="preview-image" src="{{ user.profile_image.url }}">
-            <input style="display: block;" type="file" id="input-image" name="image">
+            <label for="input-image">
+                <img style="width:200px; height:200px;margin:5px;" id="preview-image" src="{{ user.profile_image.url }}">
+            </label>
+            <input style="display: none;" type="file" id="input-image" name="image">
         </div>
         <div class="form_container">
             <p>아이디 : {{user.username}}</p>
@@ -42,8 +44,6 @@
           readImage(e.target)
       })
 
-      
-
 
 
       </script>
@@ -51,7 +51,10 @@
 
 
     <input type="submit" value="수정">
-    <input type="submit" value="취소">
+    <a href="{% url 'accounts:detail' user.id %}">
+        <button type="button" >취소</button>
+     </a>
+     
 </form>
 
 {% endblock content %}
