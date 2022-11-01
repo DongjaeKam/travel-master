@@ -4,7 +4,6 @@ from django.conf import settings
 class Review(models.Model):
     title = models.CharField(max_length=20)
     content = models.TextField()
-    image = models.ImageField(upload_to='image/', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     places = [
@@ -27,6 +26,9 @@ class Review(models.Model):
     
     def __str__(self):
         return self.title
+class Photo(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/', blank=True)
 
 class Comment(models.Model):
     content = models.CharField(max_length=200)
