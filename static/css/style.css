@@ -15,6 +15,7 @@
   margin-left: 2rem;
 }
 
+
 @media only screen and (max-width: 800px) {
   .detail-user-info{
     flex-direction: column;
@@ -31,4 +32,14 @@
   .detail-user-cate{
     font-size: 1.2rem;
   }
+}
+
+/* follow */
+
+#follow-cnt{
+  display: flex;
+}
+
+.follow{
+  margin: 1rem 1rem;
 }
