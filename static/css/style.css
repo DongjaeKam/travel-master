@@ -1,0 +1,34 @@
+/* accounts.detail 페이지 */
+.detail-user-info{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.detail-user-image{
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+}
+
+.detail-user-words{
+  margin-left: 2rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .detail-user-info{
+    flex-direction: column;
+  }
+
+  .detail-user-words{
+    margin: 2rem 0;
+  }
+
+  .detail-user-image{
+    width: 15rem;
+    height: 15rem;
+  }
+  .detail-user-cate{
+    font-size: 1.2rem;
+  }
+}
