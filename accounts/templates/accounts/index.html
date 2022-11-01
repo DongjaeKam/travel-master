@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}TEST{% endblock title %}
+
+{% block content %}
+<section class="test container">
+  <h1>TEST</h1>
+  <h4>{{ user.profile_name }}으로 로그인 되어 있음</h4>
+  <a href="{% url 'accounts:signup' %}">회원가입</a>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">닉네임</th>
+        <th scope="col">이메일</th>
+        <th scope="col">프로필 이미지 URL</th>
+        <th scope="col">프로필 페이지</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in datas %}
+      <tr>
+        <td>{{ data.profile_name }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.profile_image.url }}</td>
+        <td><a class="btn btn-primary" href="{% url 'accounts:detail' data.pk %}" role="button">Link</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock content %}
