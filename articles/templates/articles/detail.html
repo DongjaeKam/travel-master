@@ -8,11 +8,11 @@
       </span>
     </div>
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner ">
+      <div class="carousel-inner bg-dark" style="">
         {% for photo in review.photo_set.all %}
 
           <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-            <img src="{{ photo.image.url }}" alt="">
+            <img src="{{ photo.image.url }}" alt="" style="width:100%">
           </div>
         {% endfor %}
         </div>
