@@ -15,7 +15,7 @@
       <h3 class='detail-user-cate'>가입한 날짜: {{ user.date_joined.date }}</h3>
 
       <a class="btn btn-primary" href="{% url 'accounts:index' %}" role="button">뒤로가기</a>
-      <a class="btn btn-outline-danger" href="#" role="button">회원 정보 수정</a>
+      <a class="btn btn-outline-danger" href="{% url 'accounts:' %}" role="button">회원 정보 수정</a>
     </div>
   </div>
 </section>  

@@ -4,20 +4,23 @@
 
 <h1>{{user}} 프로필</h1>
 <form action="" method="POST" method="POST" enctype="multipart/form-data">
-    <p>username : {{user.username}}</p>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div style = 'margin:10px; margin-right:5px;'>
-        <div class="img_input">
-          <p>image</p>
+    <div class = 'd-flex' style="margin-top:10px;">
+        <div style = 'margin:10px; margin-right:5px;'>
+            <img style="width:200px; height:200px;" id="preview-image" src="{{ user.profile_image.url }}">
+            <input style="display: block;" type="file" id="input-image" name="image">
         </div>
-        {% if user.profile_image %}
-            <img style="width:200px; height:200px;" id="preview-image" src="https://dummyimage.com/500x500/ffffff/000000.png&text=preview+image">
-        {% else %}
-            <img style="width:200px; height:200px;" id="preview-image" src="user.profile_image.url">
-        {% endif %}
-        <input style="display: block;" type="file" id="input-image" name="image">
+        <div class="form_container">
+            <p>아이디 : {{user.username}}</p>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <a href = "{% url 'accounts:change_password' %}" >비밀번호 변경</a>
+        </div>
+
+        
+
     </div>
+    
+        
 
     <script>
         function readImage(input) {
@@ -40,6 +43,11 @@
       inputImage.addEventListener("change", e => {
           readImage(e.target)
       })
+
+      
+
+
+
       </script>
 
 
