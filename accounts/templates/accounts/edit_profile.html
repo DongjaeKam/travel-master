@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>{{user}} 프로필</h1>
+<h2>{{user}} 프로필</h2>
 <form action="" method="POST" method="POST" enctype="multipart/form-data">
     <div class = 'd-flex' style="margin-top:10px;">
         <div style = 'margin:10px; margin-right:5px;'>
@@ -53,7 +53,7 @@
     <input type="submit" value="수정">
     <a href="{% url 'accounts:detail' user.id %}">
         <button type="button" >취소</button>
-     </a>
+    </a>
      
 </form>
 
