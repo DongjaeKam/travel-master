@@ -9,14 +9,14 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-
+import datetime
 
 def index(request):
-    popular = Search.objects.order_by("-count")[:10]
+    popular_search = Search.objects.order_by("-count")[:10]
     review = Review.objects.all()
     context = {
         "review": review,
-        "popular":popular,
+        "popular_search":popular_search,
     }
     return render(request, "articles/index.html", context)
 
@@ -169,19 +169,47 @@ def searchfail(request):
 @login_required(login_url="accounts:login")
 def comment_create(request, pk):
     review = Review.objects.get(pk=pk)
-    user = User.objects.get(pk=request.user.pk)
-    user.rank += 1
-    user.save()
-    if request.method == "POST":
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.user = request.user
-            comment.review = review
-            comment.save()
-        return redirect("articles:review_detail", pk)
-    else:
-        return redirect("articles:review_detail", pk)
+    users = User.objects.get(pk=request.user.pk)
+    users.rank += 1
+    users.save()
+
+    comment_form = CommentForm(request.POST)
+    user = request.user.pk
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.review = review
+        comment.user = request.user
+        comment.save()
+    # 제이슨은 객체 형태로 받질 않음 그래서 리스트 형태로 전환을 위해 리스트 생성
+    temp = Comment.objects.filter(review_id=pk).order_by('-pk')
+    comment_data = []
+    for t in temp:
+        t.created_at = t.created_at.strftime('%Y-%m-%d %H:%M')
+        comment_data.append({
+            'id': t.user_id, 
+            'userName': t.user.username, 
+            'content': t.content,
+            'commentPk': t.pk,
+            'created_at':t.created_at,
+            'profile_name':t.user.profile_name,
+            'profile_image':t.user.profile_image.url,
+        })
+    context = {
+        'comment_data': comment_data,
+        'review_pk': pk,
+        'user': user,
+    }
+    return JsonResponse(context)
+    # if request.method == "POST":
+    #     comment_form = CommentForm(request.POST)
+    #     if comment_form.is_valid():
+    #         comment = comment_form.save(commit=False)
+    #         comment.user = request.user
+    #         comment.review = review
+    #         comment.save()
+    #     return redirect("articles:review_detail", pk)
+    # else:
+    #     return redirect("articles:review_detail", pk)
 
 # 지도 테스트 용
 def map(request):
