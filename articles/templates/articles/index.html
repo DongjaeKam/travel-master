@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form action="{%url 'articles:search' %}" class="d-flex" role="search" method="">
+    <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+
+  {% for r in review %}
+    <a href="{% url 'articles:review_detail' r.pk %}">{{r.title}}</a>
+    {{r.content}}
+    {{r.place}}
+    {{r.theme}}
+    <br>
+  {% endfor %}
+
+{% endblock %}

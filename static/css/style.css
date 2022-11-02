@@ -1,3 +1,20 @@
+/* navigation bar */
+
+.nav-logo{
+  width: 3.5rem;
+  margin-right: 1rem;
+}
+
+.nav-login-name{
+  text-decoration: none;
+  color: rgb(112,112,113);
+}
+
+.nav-login-name:hover{
+  color: black;
+  transition: all 0.5s ease;
+}
+
 /* accounts.detail 페이지 */
 .detail-user-info{
   display:flex;
@@ -15,6 +32,7 @@
   margin-left: 2rem;
 }
 
+
 @media only screen and (max-width: 800px) {
   .detail-user-info{
     flex-direction: column;
@@ -31,4 +49,14 @@
   .detail-user-cate{
     font-size: 1.2rem;
   }
+}
+
+/* follow */
+
+#follow-cnt{
+  display: flex;
+}
+
+.follow{
+  margin: 1rem 1rem;
 }
