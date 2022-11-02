@@ -11,5 +11,7 @@ urlpatterns = [
     path("<int:pk>/update/", views.update, name="review_update"),
     path("search/", views.search, name="search"),
     path("searchfail/", views.searchfail, name="searchfail"),
+    path("map/", views.map, name="map"),
+    path("map2/", views.map2, name="map2"),
     path("<int:pk>/comment_create/", views.comment_create, name="comment_create"),
 ]
