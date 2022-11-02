@@ -36,7 +36,7 @@ def login(request):
     context = {
         'form': form
     }
-    return redirect('articles:index')
+    return redirect('accounts:index')
 
 # 로그아웃 페이지
 def logout(request):
