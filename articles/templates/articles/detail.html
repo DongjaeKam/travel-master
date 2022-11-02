@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load django_bootstrap5 %}
 {% block content %}
   <div class="card" style="width: 18rem;">
     <div class="card-header">
@@ -32,5 +33,15 @@
       <h5 class="card-title">{{ review.title }}</h5>
       <p class="card-text">{{ review.content }}</p>
       <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-primary">수정하기</a>
+      
+      <form action="{%url 'articles:comment_create' review.pk %}" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form comment_form %}
+        <input class="btn btn-success" type="submit" value="제출">
+      </form>
+      {% for comment in comments %}
+        <p>{{ comment }}</p>
+        <hr>
+      {% endfor %}
   </div>
   {% endblock %}
