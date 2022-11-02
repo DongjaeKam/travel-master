@@ -94,7 +94,6 @@ def update(request, pk):
     }
     return render(request, "articles/create.html", context)
 
-
 def search(request):
     popular_list = {}
     print("확인1")
