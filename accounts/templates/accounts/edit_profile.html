@@ -2,29 +2,28 @@
 
 {% block content %}
 
-<h1>{{user}} 프로필</h1>
-<form action="" method="POST" method="POST" enctype="multipart/form-data">
+<div class="container">
+
+    <h2>{{user}} 프로필</h2>
+    <form action="" method="POST" method="POST" enctype="multipart/form-data">
     <div class = 'd-flex' style="margin-top:10px;">
         <div style = 'margin:10px; margin-right:5px;'>
-            <img style="width:200px; height:200px;" id="preview-image" src="{{ user.profile_image.url }}">
-            <input style="display: block;" type="file" id="input-image" name="image">
+            <label for="input-image">
+                <img style="width:200px; height:200px;margin:5px;" id="preview-image" src="{{ user.profile_image.url }}">
+            </label>
+            <input style="display: none;" type="file" id="input-image" name="image">
         </div>
         <div class="form_container">
             <p>아이디 : {{user.username}}</p>
             {% csrf_token %}
             {{ form.as_p }}
-            <a href = "{% url 'accounts:change_password' %}" >비밀번호 변경</a>
+            <a href = "{% url 'accounts:change_password' user.pk %}" >비밀번호 변경</a>
         </div>
-
-        
-
     </div>
     
-        
-
     <script>
         function readImage(input) {
-          // 인풋 태그에 파일이 있는 경우
+            // 인풋 태그에 파일이 있는 경우
           if(input.files && input.files[0]) {
               // 이미지 파일인지 검사 (생략)
               // FileReader 인스턴스 생성
@@ -33,7 +32,7 @@
               reader.onload = e => {
                   const previewImage = document.getElementById("preview-image")
                   previewImage.src = e.target.result
-              }
+                }
               // reader가 이미지 읽도록 하기
               reader.readAsDataURL(input.files[0])
           }
@@ -44,16 +43,18 @@
           readImage(e.target)
       })
 
-      
-
 
 
       </script>
 
 
 
-    <input type="submit" value="수정">
-    <input type="submit" value="취소">
+<input type="submit" value="수정">
+<a href="{% url 'accounts:detail' user.id %}">
+    <button type="button" >취소</button>
+</a>
+
 </form>
 
+</div>
 {% endblock content %}

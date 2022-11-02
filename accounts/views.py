@@ -82,7 +82,7 @@ def edit_profile(request):
             user = form.save()  
             user.profile_image =request.FILES['profile_image']
             user.save()
-            return redirect('accounts:my_profile')
+            return redirect('accounts:index')
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {
@@ -98,7 +98,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('index')
+            return redirect('accounts:index')
         else:
             messages.error(request, 'Please correct the error below.')
     else:

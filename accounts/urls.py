@@ -4,6 +4,7 @@ from . import views
 app_name = "accounts"
 
 urlpatterns = [
+
     path("index/", views.index, name="index"),
     path("", views.login, name="login"),
     path("logout/", views.logout, name="logout"),
@@ -12,4 +13,6 @@ urlpatterns = [
     path("edit_profile/", views.edit_profile, name="edit_profile"),
     path("change_password/", views.change_password, name="change_password"),
     path("<int:pk>/follow/", views.follow, name="follow"),
+    path('wrong_approach/',views.wrong_approach, name='wrong_approach'),
 ]
+

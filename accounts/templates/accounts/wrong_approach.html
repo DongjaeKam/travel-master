@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}잘못된 접근{% endblock title %}
+
+{% block content %}
+
+<div class="container d-flex flex-column align-items-center" style="margin-top:50px;">
+    <h1>잘못된 접근입니다.</h1>
+    <a href="{% url 'articles:index' %}" style="margin-top:20px;">메인 페이지로 이동</a>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}
