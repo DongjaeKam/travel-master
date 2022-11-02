@@ -94,6 +94,7 @@ def update(request, pk):
     }
     return render(request, "articles/create.html", context)
 
+
 def search(request):
     popular_list = {}
     if request.method == "GET":
@@ -148,6 +149,18 @@ def search(request):
 
 def searchfail(request):
     return render(request, "articles/searchfail.html")
+def comment_create(request, pk):
+
+    review = Review.objects.get(pk=pk)
+
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            comment.review = review
+            comment.save()
+        return redirect("articles:review_detail", pk)
 def map(request):
     return render(request,"articles/map.html")
 def map2(request):
