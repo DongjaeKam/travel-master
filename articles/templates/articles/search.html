@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for i in popular%}
+    <br>{{forloop.counter}}:{{i.title}}
+  {% endfor %}
+
+  <hr>
+
+  {% for board in boards %}
+                  <tr>
+                    <td>
+                      <a class="text-dark fw-bolder" href="{% url 'articles:review_detail' board.pk %}">{{board.title}}</a>
+                    </td>
+                    <td>{{board.user}}</td>
+                    <td>{{board.created_at |date:'m월 d일'}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-12 my-5">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                {% if boards.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?p={{ boards.previous_page_number }}">이전</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#">이전</a>
+                  </li>
+                {% endif %}
+                <li class="page-item">
+                  <a class="page-link" href="#">{{ boards.number }}
+                    /
+                    {{ boards.paginator.num_pages }}</a>
+                </li>
+                {% if boards.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?p={{ boards.next_page_number }}">다음</a>
+                  </li>
+                {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#">다음</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+{% endblock %}
