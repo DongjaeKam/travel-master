@@ -3,12 +3,10 @@
 
 {% block content %}
 
-<div class="container d-flex flex-column align-items-center col-auto" style="margin-bottom:50px">
+<div class="container d-flex flex-column align-items-center col-auto" style="margin-bottom:50px
 
-    <h1 style ='font-size: 30px;'>{{user}} 프로필</h1>
 
-   
-    
+    <h1 style ='font-size: 30px;'>{{user}} 프로필</h1
 
     <form class ='form-inline'  action="" method="POST" method="POST" enctype="multipart/form-data">
 
@@ -19,8 +17,7 @@
             <input style="display: none;" type="file" id="input-image" name="image" accept=".gif, .jpg, .png">
             <p style="color:red;font-size:7px;">이미지는 *.gif, *.jpg, *.png 형식만 가능합니다. </p>
         </div>
-
-
+                                               
         <script>
             function readImage(input) {
                 // 인풋 태그에 파일이 있는 경우
@@ -60,4 +57,5 @@
 
 
 </div>
+
 {% endblock content %}
