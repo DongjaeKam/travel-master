@@ -30,7 +30,7 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect(request.GET.get('next') or 'accounts:index')
+            return redirect(request.GET.get('next') or 'articles:index')
     else:
         form = AuthenticationForm()
     context = {
@@ -50,7 +50,8 @@ def detail(request,pk):
   context = {
     'user': user,
     'followers': user.followers.all(), 
-    'followings': user.followings.all()
+    'followings': user.followings.all(),
+    'reviews': user.review_set.all(),
   }
 
   return render(request,'accounts/detail.html', context)
@@ -62,7 +63,7 @@ def signup(request):
     if sign_form.is_valid():
       sign = sign_form.save()
       auth_login(request, user=sign)
-      return redirect('accounts:index')
+      return redirect('articles:index')
   else:
     sign_form = CustomUserModel()
 
@@ -74,40 +75,57 @@ def signup(request):
 
 
 #프로필 수정
-def edit_profile(request):
-    if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST ,instance=request.user)
-        if form.is_valid():
-            user = form.save()  
-            user.profile_image =request.FILES['profile_image']
-            user.save()
-            return redirect('accounts:index')
+@login_required
+def edit_profile(request,pk):
+
+    user = get_user_model().objects.get(pk=pk)
+
+    if request.user == user:
+
+      if request.method == 'POST':
+          form = CustomUserChangeForm(request.POST ,instance=request.user)
+          if form.is_valid():
+              user = form.save()  
+              user.profile_image =request.FILES['profile_image']
+              user.save()
+              return redirect('accounts:detail', user.pk)
+      else:
+          form = CustomUserChangeForm(instance=request.user)
+      
+      context = {
+          'form': form,
+      }
+
+      return render(request,'accounts/edit_profile.html',context)
     else:
-        form = CustomUserChangeForm(instance=request.user)
-    context = {
+      return render(request,'accounts/wrong_approach')
+
+@login_required
+def change_password(request,pk):
+
+    user = get_user_model().objects.get(pk=pk)
+
+    if request.user == user:
+
+      if request.method == 'POST':
+          form = PasswordChangeForm(request.user, request.POST)
+          if form.is_valid():
+              user = form.save()
+              update_session_auth_hash(request, user)  # Important!
+              messages.success(request, 'Your password was successfully updated!')
+              return redirect('accounts:edit_profile', user.pk)
+          else:
+              messages.error(request, 'Please correct the error below.')
+      else:
+          form = PasswordChangeForm(request.user)
+
+      context = {
         'form': form,
-    }
+      }
 
-    return render(request,'accounts/edit_profile.html',context)
-    
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('accounts:index')
-        else:
-            messages.error(request, 'Please correct the error below.')
+      return render(request, 'accounts/change_password.html',context)
     else:
-        form = PasswordChangeForm(request.user)
-
-    context = {
-      'form': form,
-    }
-
-    return render(request, 'accounts/change_password.html',context)
+      return render(request,'accounts/wrong_approach')
 
 # follow
 @login_required
@@ -129,3 +147,8 @@ def follow(request, pk):
   }
 
   return JsonResponse(data)
+
+def wrong_approach(request):
+
+
+  return render(request,'accounts/wrong_approach')
