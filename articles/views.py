@@ -1,20 +1,30 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Review, Comment, Search, Photo
 from .forms import ReviewForm, CommentForm, PhotoForm
+from accounts.models import User
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+
+
 def index(request):
+    popular = Search.objects.order_by("-count")[:10]
     review = Review.objects.all()
     context = {
         "review": review,
+        "popular":popular,
     }
     return render(request, "articles/index.html", context)
 
 @login_required(login_url="accounts:login")
 def create(request):
+    user = User.objects.get(pk=request.user.pk)
+    user.rank += 2
+    user.save()
     if request.method == "POST":
         review_form = ReviewForm(request.POST, request.FILES)
         photo_form = PhotoForm(request.POST, request.FILES)
@@ -66,34 +76,38 @@ def detail(request, pk):
 def update(request, pk):
     review = Review.objects.get(pk=pk)
     photos = Photo.objects.filter(review_id=review.pk)
-    if request.method == "POST":
-        review_form = ReviewForm(request.POST, request.FILES, instance=review)
-        photo_form = PhotoForm(request.POST, request.FILES)
-        images = request.FILES.getlist("image")
-        for photo in photos:
-            if photo.image:
-                photo.delete()
-        if review_form.is_valid() and photo_form.is_valid():
-            review = review_form.save(commit=False)
-            if len(images):
-                for image in images:
-                    image_instance = Photo(review=review, image=image)
+
+    if review.user == request.user:
+        if request.method == "POST":
+            review_form = ReviewForm(request.POST, request.FILES, instance=review)
+            photo_form = PhotoForm(request.POST, request.FILES)
+            images = request.FILES.getlist("image")
+            for photo in photos:
+                if photo.image:
+                    photo.delete()
+            if review_form.is_valid() and photo_form.is_valid():
+                review = review_form.save(commit=False)
+                if len(images):
+                    for image in images:
+                        image_instance = Photo(review=review, image=image)
+                        review.save()
+                        image_instance.save()
+                else:
                     review.save()
-                    image_instance.save()
-            else:
-                review.save()
-            return redirect("articles:index")
-    else:
-        review_form = ReviewForm(instance=review)
-        if photos:
-            photo_form = PhotoForm(instance=photos[0])
+                return redirect("articles:index")
         else:
-            photo_form = PhotoForm()
-    context = {
-        "review_form": review_form,
-        "photo_form": photo_form,
-    }
-    return render(request, "articles/create.html", context)
+            review_form = ReviewForm(instance=review)
+            if photos:
+                photo_form = PhotoForm(instance=photos[0])
+            else:
+                photo_form = PhotoForm()
+        context = {
+            "review_form": review_form,
+            "photo_form": photo_form,
+        }
+        return render(request, "articles/create.html", context)
+    else:
+        return redirect('accounts:wrong_approach')
 
 
 def search(request):
@@ -103,7 +117,7 @@ def search(request):
 
         if not search.isdigit():
             if Review.objects.filter(
-                Q(title__icontains=search) | Q(content__icontains=search)
+                Q(title__icontains=search) | Q(content__icontains=search) | Q(place__icontains=search)
             ):
                 popular_list[search] = popular_list.get(search, 0) + 1
 
@@ -155,6 +169,9 @@ def searchfail(request):
 @login_required(login_url="accounts:login")
 def comment_create(request, pk):
     review = Review.objects.get(pk=pk)
+    user = User.objects.get(pk=request.user.pk)
+    user.rank += 1
+    user.save()
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -171,4 +188,20 @@ def map(request):
     return render(request,"articles/map.html")
 def map2(request):
     return render(request,"articles/map2.html")
-####
+
+# 좋아요 기능
+def like(request,pk):
+    review = Review.objects.get(pk = pk)
+    if request.user not in review.like_users.all():
+        review.like_users.add(request.user)
+        is_like = True
+    else:
+        review.like_users.remove(request.user)
+        is_like = False
+
+    data = {
+        'isLike' : is_like,
+        'likeCount' : review.like_users.count(),
+    }
+    
+    return JsonResponse(data)

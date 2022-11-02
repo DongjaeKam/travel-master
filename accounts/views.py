@@ -77,7 +77,6 @@ def signup(request):
 #프로필 수정
 @login_required
 def edit_profile(request,pk):
-
     user = get_user_model().objects.get(pk=pk)
 
     if request.user == user:
@@ -149,6 +148,4 @@ def follow(request, pk):
   return JsonResponse(data)
 
 def wrong_approach(request):
-
-
   return render(request,'accounts/wrong_approach')
