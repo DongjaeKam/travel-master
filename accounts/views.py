@@ -50,7 +50,8 @@ def detail(request,pk):
   context = {
     'user': user,
     'followers': user.followers.all(), 
-    'followings': user.followings.all()
+    'followings': user.followings.all(),
+    'reviews': user.review_set.all(),
   }
 
   return render(request,'accounts/detail.html', context)

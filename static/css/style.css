@@ -60,3 +60,14 @@
 .follow{
   margin: 1rem 1rem;
 }
+
+/* detail.page review */
+.user-page-review{
+  margin: 1rem 0;
+}
+
+.user-page-review-image{
+  margin-right: 1rem;
+  width: 200px;
+  height: 150px;
+}
