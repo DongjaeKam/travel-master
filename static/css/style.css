@@ -16,6 +16,10 @@
 }
 
 /* accounts.detail 페이지 */
+.detail-user{
+  margin: 2rem 0 ;
+}
+
 .detail-user-info{
   display:flex;
   justify-content: center;
@@ -59,4 +63,66 @@
 
 .follow{
   margin: 1rem 1rem;
+}
+
+/* detail.page review */
+.user-page-review{
+  margin: 1rem 0;
+}
+
+.user-page-review-image{
+  margin-right: 1rem;
+  width: 200px;
+  height: 150px;
+}
+
+/* review.detail */
+.carousel-item{
+  position:relative;
+  height:400px;
+  background-color: rgb(112,112,113);
+}
+
+.carousel-image{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  height: 100%;
+}
+
+.review-main{
+  margin: 2rem 4rem;
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: rgb(240, 240, 240);
+}
+
+.bi-heart, .bi-heart-fill{
+  margin-right: 1rem;
+  color: rgb(236, 100, 8);
+  font-size: 1.5rem;
+}
+
+.comment-box{
+  margin: 2rem 4rem;
+  padding: 2rem;
+}
+
+.comment{
+  margin: 1.5rem 2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 2px 4px 6px rgb(184, 184, 184);
+}
+
+.comment-user-info {
+  display: flex;
+  align-items: center;
+}
+
+.comment-user-image{
+  margin-right: 1rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
 }

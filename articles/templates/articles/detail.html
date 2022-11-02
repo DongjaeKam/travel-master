@@ -2,48 +2,106 @@
 
 {% load django_bootstrap5 %}
 {% block content %}
-  <div class="card" style="width: 18rem;">
-    <div class="card-header">
-      <span>
-        <h1>하이</h1>
-      </span>
-    </div>
-    <div class="card-body">
-    {% comment %} 캐러셀 부분 {% endcomment %}
-      <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner bg-dark" style="">
-          {% for photo in review.photo_set.all %}
+  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner bg-dark" style="">
+      {% for photo in review.photo_set.all %}
 
-            <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-              <img src="{{ photo.image.url }}" alt="" style="width:100%">
-            </div>
-          {% endfor %}
-
-          </div>
-        
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-      </div>
-
-    {% comment %} 캐러셀 부분 {% endcomment %}
-      <h5 class="card-title">{{ review.title }}</h5>
-      <p class="card-text">{{ review.content }}</p>
-      <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-primary">수정하기</a>
-      
-      <form action="{%url 'articles:comment_create' review.pk %}" method="POST">
-        {% csrf_token %}
-        {% bootstrap_form comment_form %}
-        <input class="btn btn-success" type="submit" value="제출">
-      </form>
-      {% for comment in comments %}
-        <p>{{ comment }}</p>
-        <hr>
+        <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+          <img class='carousel-image' src="{{ photo.image.url }}" alt="">
+        </div>
       {% endfor %}
+
+      </div>
+    
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
   </div>
+
+  <section class="review-main">
+    <section>
+      <h1 class="review-title">{{ review.title }}</h1>
+      <h4 class="review-user"><span class="fs-5">written by</span> | {{ review.user.profile_name }}</h4>
+      <h6 class="review-updated text-muted">{{ review.updated_at }}</h6>
+      <div class="heart d-flex align-items-end">
+        {% if request.user not in review.like_users.all %}
+        <i data-review-id="{{ review.pk }}" id="like-btn" class="bi bi-heart"></i>
+        {% else %}
+        <i data-review-id="{{ review.pk }}" id="like-btn"  class="bi bi-heart-fill"></i>
+        {% endif %}
+        <h6 class="likes text-muted">| {{ review.like_users.count }}명이 이 글을 좋아해요</h6>
+      </div>
+      {% if request.user == review.user %}
+      <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-outline-danger btn-sm">수정하기</a>
+      {% endif %}
+      <hr>
+      <h3 class="review-place">{{ review.place }} | {{ review.theme }}</h3>
+
+    </section>
+
+    <section class="mt-5">
+      <h3>{{ review.content }}</h3>
+    </section>
+  </section>
+
+ 
+      
+  <section class="comment-box">
+    <form action="{%url 'articles:comment_create' review.pk %}" method="POST">
+      {% csrf_token %}
+      {% bootstrap_form comment_form %}
+      <input class="btn btn-success" type="submit" value="제출">
+    </form>
+    
+    <div class="comments">
+      {% for comment in comments %}
+      <div class="comment">
+        <h4>{{ comment }}</h4>
+        <hr>
+        <div class="comment-user-info">
+          <img class="comment-user-image" src="{{ comment.user.profile_image.url }}" alt="">
+          <div class="comment-user-detail">
+            <h5>{{ comment.user.profile_name }}</h5>
+            <h5>{{ comment.created_at }}</h5>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
   {% endblock %}
+
+  {% block script %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const likeBtn = document.querySelector('#like-btn')
+
+    likeBtn.addEventListener('click', function(event) {
+      console.log(event.target.dataset)
+      axios({
+        method: 'get',
+        url: `/articles/${event.target.dataset.reviewId}/like/`,
+      })
+      .then(response => {
+        console.log(response.data)
+        if (response.data.isLike === true) {
+          event.target.classList.add('bi-heart-fill')
+          event.target.classList.remove('bi-heart')
+        } else {
+          event.target.classList.add('bi-heart')
+          event.target.classList.remove('bi-heart-fill')
+        }
+        const likeCount = document.querySelector('.likes')
+        likeCount.innerHTML=`
+          <h6 class="likes m-0 text-muted ">| ${response.data.likeCount}명이 이 글을 좋아해요</h6>
+        `
+      })
+    })
+
+  </script>
+  {% endblock script %}
