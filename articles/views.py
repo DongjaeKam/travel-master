@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Review, Comment, Search, Photo
 from .forms import ReviewForm, CommentForm, PhotoForm
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -91,3 +93,66 @@ def update(request, pk):
         "photo_form": photo_form,
     }
     return render(request, "articles/create.html", context)
+
+def search(request):
+    popular_list = {}
+    print("확인1")
+    if request.method == "GET":
+        search = request.GET.get("searched", "")
+        print("확인2")
+
+        if not search.isdigit():
+            if Review.objects.filter(
+                Q(title__icontains=search) | Q(content__icontains=search)
+            ):
+                popular_list[search] = popular_list.get(search, 0) + 1
+        print("확인3")
+
+        for k, v in sorted(popular_list.items(), key=lambda x: -x[1]):
+            if Search.objects.filter(title=k):
+                s = Search.objects.get(title=k)
+                s.count += 1
+                s.save()
+            else:
+                s = Search(title=k, count=v)
+                s.save()
+        popular = Search.objects.order_by("-count")[:10]
+
+        search_list = Review.objects.filter(
+            Q(title__icontains=search)
+            | Q(content__icontains=search)
+            | Q(place__icontains=search)
+            | Q(theme__icontains=search)
+        )
+
+        if search:
+            print("확인4")
+
+            if search_list:
+                print("확인5")
+
+                page = int(request.GET.get("p", 1))
+                pagenator = Paginator(search_list, 4)
+                boards = pagenator.get_page(page)
+                return render(
+                    request,
+                    "articles/search.html",
+                    {
+                        "search": search,
+                        "boards": boards,
+                        "search_list": search_list,
+                        "popular": popular,
+                    },
+                )
+            else:
+                k = "검색 결과가 없습니다 다시 검색해주세요"
+                context = {"v": k}
+                return render(request, "articles/searchfail.html", context)
+        else:
+            k = "검색 결과가 없습니다 다시 검색해주세요"
+            context = {"v": k}
+            return render(request, "articles/searchfail.html", context)
+
+
+def searchfail(request):
+    return render(request, "articles/searchfail.html")
