@@ -96,17 +96,14 @@ def update(request, pk):
 
 def search(request):
     popular_list = {}
-    print("확인1")
     if request.method == "GET":
         search = request.GET.get("searched", "")
-        print("확인2")
 
         if not search.isdigit():
             if Review.objects.filter(
                 Q(title__icontains=search) | Q(content__icontains=search)
             ):
                 popular_list[search] = popular_list.get(search, 0) + 1
-        print("확인3")
 
         for k, v in sorted(popular_list.items(), key=lambda x: -x[1]):
             if Search.objects.filter(title=k):
@@ -124,12 +121,8 @@ def search(request):
             | Q(place__icontains=search)
             | Q(theme__icontains=search)
         )
-
         if search:
-            print("확인4")
-
             if search_list:
-                print("확인5")
 
                 page = int(request.GET.get("p", 1))
                 pagenator = Paginator(search_list, 4)
@@ -153,6 +146,9 @@ def search(request):
             context = {"v": k}
             return render(request, "articles/searchfail.html", context)
 
-
 def searchfail(request):
     return render(request, "articles/searchfail.html")
+def map(request):
+    return render(request,"articles/map.html")
+def map2(request):
+    return render(request,"articles/map2.html")
