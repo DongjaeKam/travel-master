@@ -7,6 +7,7 @@
 
   {% for r in review %}
     <a href="{% url 'articles:review_detail' r.pk %}">{{r.title}}</a>
+    {{r.user.profile_name}}
     {{r.content}}
     {{r.place}}
     {{r.theme}}

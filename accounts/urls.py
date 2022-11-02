@@ -13,6 +13,5 @@ urlpatterns = [
     path("<int:pk>/edit_profile/", views.edit_profile, name="edit_profile"),
     path("<int:pk>/change_password/", views.change_password, name="change_password"),
     path("<int:pk>/follow/", views.follow, name="follow"),
-    path('wrong_approach/',views.wrong_approach, name='wrong_approach'),
 ]
 

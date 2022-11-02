@@ -13,12 +13,10 @@
       <h3 class='detail-user-cate'>이메일 주소: {{ user.email }}</h3>
       <h3 class='detail-user-cate'>유저 이름: {{ user.last_name }} {{ user.first_name }} </h3>
       <h3 class='detail-user-cate'>가입한 날짜: {{ user.date_joined.date }}</h3>
-      <a class="btn btn-primary" href="{% url 'accounts:index' %}" role="button">뒤로가기</a>
+      <a class="btn btn-primary" href="{% url 'articles:index' %}" role="button">뒤로가기</a>
       
       {% if request.user == user %}
-      
-      <a class="btn btn-outline-danger" href="{% url 'accounts:edit_profile' user.pk %}" role="button">회원 정보 수정</a>
-      
+      <a class="btn btn-outline-danger" href="{% url 'accounts:edit_profile' %}" role="button">회원 정보 수정</a>
       {% endif %}
     </div>
   </div>
@@ -38,6 +36,24 @@
     <h3 class="follow">Followers : {{ followers.count }}</h3>
     <h3 class="follow">Followings : {{ followings.count }}</h3>
   </div>
+</section>
+<section class='container'>
+  <h2 class="text-center">유저가 쓴 리뷰 <span class='fs-4'>| {{ reviews.count }}</span></h2>
+  {% for review in reviews %}
+  <div class="user-page-review d-flex align-items-center">
+    {% for photo in review.photo_set.all %}
+    {% if forloop.first %}
+    <img class="user-page-review-image" src="{{ photo.image.url }}" alt="">
+    {% endif %}
+    {% endfor %}
+    <div class="user-review-detail">
+      <p>제목: {{ review.title }}</p>
+      <p>장소: {{ review.place }}</p>
+      <p>수정된 날짜: {{ review.updated_at }}</p>
+    </div>
+  </div>
+
+  {% endfor %}
 </section>
 {% endblock content %}
 
