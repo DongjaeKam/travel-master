@@ -24,7 +24,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link fw-bold" href="#">리뷰쓰기</a>
+            <a class="nav-link fw-bold" href="{% url 'articles:review_create' %}">리뷰쓰기</a>
           </li>
         </ul>
         {% if not request.user.is_authenticated %}
