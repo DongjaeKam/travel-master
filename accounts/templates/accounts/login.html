@@ -2,14 +2,21 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-  <div class="container" style="width: 600px">
-    <div class="my-5">
-      <h1>로그인</h1>
-      <form action="" method="POST">
+
+<div class="container d-flex flex-column align-items-center col-auto">
+
+    <h1>로그인</h1>
+
+    <form action="" style="margin-top:10px;" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <button type="submit" class="btn btn-dark">제출</button>
-      </form>
-    </div>
-  </div>
-{% endblock %}
+        <input class='btn btn-outline-primary' type="submit" value="로그인">
+    </form>
+
+
+</div>
+
+
+
+{% endblock content %}
+

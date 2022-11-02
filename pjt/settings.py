@@ -139,3 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+# Django Session Timeout Code
+# 자동 로그아웃 기능입니다. 화면 벗어난뒤 20분  
+SESSION_COOKIE_AGE = 1200 
+SESSION_SAVE_EVERY_REQUEST = True

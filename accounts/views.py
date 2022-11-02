@@ -26,6 +26,13 @@ def index(request):
 # 로그인 페이지
 @csrf_exempt
 def login(request):
+  
+  if request.user.is_authenticated:
+    
+    return render(request, 'articles/index.html')
+
+  else:
+
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -37,6 +44,9 @@ def login(request):
         'form': form
     }
     return render(request, 'accounts/login.html', context)
+
+
+
 
 # 로그아웃 페이지
 def logout(request):
@@ -85,9 +95,16 @@ def edit_profile(request,pk):
           form = CustomUserChangeForm(request.POST ,instance=request.user)
           if form.is_valid():
               user = form.save()  
-              user.profile_image =request.FILES['profile_image']
-              user.save()
-              return redirect('accounts:detail', user.pk)
+
+              try:
+                user.profile_image =request.FILES['image']
+                user.save()
+              except:
+                print('error')
+
+
+              return redirect('accounts:index')
+
       else:
           form = CustomUserChangeForm(instance=request.user)
       

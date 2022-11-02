@@ -41,3 +41,5 @@ class CustomUserChangeForm(UserChangeForm):
       'first_name' : '이름',
       'last_name' : '성',
     }
+
+    
