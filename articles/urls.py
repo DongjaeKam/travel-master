@@ -14,4 +14,5 @@ urlpatterns = [
     path("map/", views.map, name="map"),
     path("map2/", views.map2, name="map2"),
     path("<int:pk>/comment_create/", views.comment_create, name="comment_create"),
+    path("<int:pk>/like/", views.like, name='like'),
 ]
