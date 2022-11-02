@@ -2,8 +2,10 @@
 
 {% block content %}
 
-<h2>{{user}} 프로필</h2>
-<form action="" method="POST" method="POST" enctype="multipart/form-data">
+<div class="container">
+
+    <h2>{{user}} 프로필</h2>
+    <form action="" method="POST" method="POST" enctype="multipart/form-data">
     <div class = 'd-flex' style="margin-top:10px;">
         <div style = 'margin:10px; margin-right:5px;'>
             <label for="input-image">
@@ -21,7 +23,7 @@
     
     <script>
         function readImage(input) {
-          // 인풋 태그에 파일이 있는 경우
+            // 인풋 태그에 파일이 있는 경우
           if(input.files && input.files[0]) {
               // 이미지 파일인지 검사 (생략)
               // FileReader 인스턴스 생성
@@ -30,7 +32,7 @@
               reader.onload = e => {
                   const previewImage = document.getElementById("preview-image")
                   previewImage.src = e.target.result
-              }
+                }
               // reader가 이미지 읽도록 하기
               reader.readAsDataURL(input.files[0])
           }
@@ -47,11 +49,12 @@
 
 
 
-    <input type="submit" value="수정">
-    <a href="{% url 'accounts:detail' user.id %}">
-        <button type="button" >취소</button>
-    </a>
-     
+<input type="submit" value="수정">
+<a href="{% url 'accounts:detail' user.id %}">
+    <button type="button" >취소</button>
+</a>
+
 </form>
 
+</div>
 {% endblock content %}
