@@ -2,16 +2,18 @@
 
 {% block content %}
 
-  <div class="container">
 
-    <h2>{{user}}프로필</h2>
-    <form action="" method="POST" enctype="multipart/form-data">
-      <div class='d-flex' style="margin-top:10px;">
-        <div style='margin:10px; margin-right:5px;'>
-          <label for="input-image">
-            <img style="width:200px; height:200px;margin:5px;" id="preview-image" src="{{ user.profile_image.url }}">
-          </label>
-          <input style="display: none;" type="file" id="input-image" name="image">
+<div class="container d-flex flex-column align-items-center">
+
+    <h1>{{user}} 프로필</h1>
+    <form action="" method="POST" method="POST" enctype="multipart/form-data">
+    <div class = 'd-flex' style="margin-top:20px;">
+        <div style = 'margin:10px; margin-right:15px;'>
+            <label for="input-image">
+                <img style="width:200px; height:200px;margin:5px;" id="preview-image" src="{{ user.profile_image.url }}">
+            </label>
+            <input style="display: none;" type="file" id="input-image" name="image" accept=".gif, .jpg, .png">
+            <p style="color:red;font-size:7px;">이미지는 *.gif, *.jpg, *.png 형식만 가능합니다. </p>
         </div>
         <div class="form_container">
           <p>아이디 :
