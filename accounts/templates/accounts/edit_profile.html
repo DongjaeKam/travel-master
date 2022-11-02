@@ -1,61 +1,63 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
 
-<div class="container d-flex flex-column align-items-center">
+<div class="container d-flex flex-column align-items-center col-auto" style="margin-bottom:50px">
 
-    <h1>{{user}} 프로필</h1>
-    <form action="" method="POST" method="POST" enctype="multipart/form-data">
-    <div class = 'd-flex' style="margin-top:20px;">
-        <div style = 'margin:10px; margin-right:15px;'>
+    <h1 style ='font-size: 30px;'>{{user}} 프로필</h1>
+
+   
+    
+
+    <form class ='form-inline'  action="" method="POST" method="POST" enctype="multipart/form-data">
+
+        <div style = 'margin-top: 20px;'>
             <label for="input-image">
-                <img style="width:200px; height:200px;margin:5px;" id="preview-image" src="{{ user.profile_image.url }}">
+                <img style="border-radius: 10px; width:200px; height:200px;margin:5px;" id="preview-image" src="{{ user.profile_image.url }}">
             </label>
             <input style="display: none;" type="file" id="input-image" name="image" accept=".gif, .jpg, .png">
             <p style="color:red;font-size:7px;">이미지는 *.gif, *.jpg, *.png 형식만 가능합니다. </p>
         </div>
-        <div class="form_container">
-            <p>아이디 : {{user.username}}</p>
-            {% csrf_token %}
-            {{ form.as_p }}
-            <a href = "{% url 'accounts:change_password' user.pk %}" >비밀번호 변경</a>
-        </div>
-    </div>
-    
-    <script>
-        function readImage(input) {
-            // 인풋 태그에 파일이 있는 경우
-          if(input.files && input.files[0]) {
-              // 이미지 파일인지 검사 (생략)
-              // FileReader 인스턴스 생성
-              const reader = new FileReader()
-              // 이미지가 로드가 된 경우
-              reader.onload = e => {
-                  const previewImage = document.getElementById("preview-image")
-                  previewImage.src = e.target.result
-                }
-              // reader가 이미지 읽도록 하기
-              reader.readAsDataURL(input.files[0])
+
+
+        <script>
+            function readImage(input) {
+                // 인풋 태그에 파일이 있는 경우
+              if(input.files && input.files[0]) {
+                  // 이미지 파일인지 검사 (생략)
+                  // FileReader 인스턴스 생성
+                  const reader = new FileReader()
+                  // 이미지가 로드가 된 경우
+                  reader.onload = e => {
+                      const previewImage = document.getElementById("preview-image")
+                      previewImage.src = e.target.result
+                    }
+                  // reader가 이미지 읽도록 하기
+                  reader.readAsDataURL(input.files[0])
+              }
           }
-      }
-      // input file에 change 이벤트 부여
-      const inputImage = document.getElementById("input-image")
-      inputImage.addEventListener("change", e => {
-          readImage(e.target)
-      })
+          // input file에 change 이벤트 부여
+          const inputImage = document.getElementById("input-image")
+          inputImage.addEventListener("change", e => {
+              readImage(e.target)
+          })
+    
+          </script>
+
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <a href = "{% url 'accounts:change_password' user.pk %}" >비밀번호 변경</a>
+
+        <div class = "d-flex justify-content-center margint-top:5px; ">
+            <button class = 'btn btn-outline-primary' style = "margin:5px;"  type="submit">수정</button>
+            <a href="{% url 'accounts:detail' user.id %}">
+                <button class='btn btn-outline-danger' style = "margin:5px;" type="button" >취소</button>
+            </a>
+        </div>
+    </form>
 
 
-
-      </script>
-
-
-
-<input type="submit" value="수정">
-<a href="{% url 'accounts:detail' user.id %}">
-    <button type="button" >취소</button>
-</a>
-
-</form>
 
 </div>
 {% endblock content %}

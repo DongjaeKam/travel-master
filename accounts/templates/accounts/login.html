@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
+{% load django_bootstrap5 %}
 
 {% block content %}
-<h1>로그인</h1>
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="로그인">
-</form>
+
+<div class="container d-flex flex-column align-items-center col-auto">
+
+    <h1>로그인</h1>
+
+    <form action="" style="margin-top:10px;" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input class='btn btn-outline-primary' type="submit" value="로그인">
+    </form>
+
+
+</div>
+
+
 
 {% endblock content %}
