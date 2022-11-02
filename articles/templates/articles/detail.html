@@ -17,6 +17,7 @@
               <img src="{{ photo.image.url }}" alt="" style="width:100%">
             </div>
           {% endfor %}
+
           </div>
         
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -28,6 +29,7 @@
             <span class="visually-hidden">Next</span>
           </button>
       </div>
+
     {% comment %} 캐러셀 부분 {% endcomment %}
       <h5 class="card-title">{{ review.title }}</h5>
       <p class="card-text">{{ review.content }}</p>

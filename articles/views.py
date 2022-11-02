@@ -47,7 +47,7 @@ def delete(request, pk):
 
 def detail(request, pk):
     review = get_object_or_404(Review, pk=pk)
-    photos = review.photo_set.all()[:3]
+    photos = review.photo_set.all()
     comments = Comment.objects.filter(review_id=pk)
     comment_form = CommentForm()
     comment_form.fields["content"].widget.attrs["placeholder"] = "댓글 작성"
