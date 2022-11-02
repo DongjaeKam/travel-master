@@ -3,8 +3,9 @@ from .models import Review, Comment, Search, Photo
 from .forms import ReviewForm, CommentForm, PhotoForm
 from django.db.models import Q
 from django.core.paginator import Paginator
-
-
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 def index(request):
     review = Review.objects.all()
     context = {
@@ -12,7 +13,7 @@ def index(request):
     }
     return render(request, "articles/index.html", context)
 
-
+@login_required(login_url="accounts:login")
 def create(request):
     if request.method == "POST":
         review_form = ReviewForm(request.POST, request.FILES)
@@ -38,7 +39,7 @@ def create(request):
     }
     return render(request, "articles/create.html", context)
 
-
+@login_required
 def delete(request, pk):
     review = Review.objects.get(pk=pk)
     review.delete()
@@ -61,7 +62,7 @@ def detail(request, pk):
     }
     return render(request, "articles/detail.html", context)
 
-
+@login_required
 def update(request, pk):
     review = Review.objects.get(pk=pk)
     photos = Photo.objects.filter(review_id=review.pk)
@@ -149,10 +150,11 @@ def search(request):
 
 def searchfail(request):
     return render(request, "articles/searchfail.html")
+
+# 댓글생성
+@login_required(login_url="accounts:login")
 def comment_create(request, pk):
-
     review = Review.objects.get(pk=pk)
-
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -161,7 +163,12 @@ def comment_create(request, pk):
             comment.review = review
             comment.save()
         return redirect("articles:review_detail", pk)
+    else:
+        return redirect("articles:review_detail", pk)
+
+# 지도 테스트 용
 def map(request):
     return render(request,"articles/map.html")
 def map2(request):
     return render(request,"articles/map2.html")
+####

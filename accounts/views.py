@@ -74,8 +74,7 @@ def signup(request):
   return render(request, 'accounts/signup.html', context)
 
 
-  #프로필 수정
-
+#프로필 수정
 @login_required
 def edit_profile(request,pk):
 
