@@ -52,16 +52,16 @@
  
       
   <section class="comment-box">
-    <form action="{%url 'articles:comment_create' review.pk %}" method="POST">
+    <form id="comment-form" data-review-id="{{ review.pk }}" action="{%url 'articles:comment_create' review.pk %}" method="POST">
       {% csrf_token %}
       {% bootstrap_form comment_form %}
       <input class="btn btn-success" type="submit" value="제출">
     </form>
     
-    <div class="comments">
+    <div id="comments" class="comments">
       {% for comment in comments %}
       <div class="comment">
-        <h4>{{ comment }}</h4>
+        <h4>{{comment.user}} - {{ comment }}</h4>
         <hr>
         <div class="comment-user-info">
           <img class="comment-user-image" src="{{ comment.user.profile_image.url }}" alt="">
@@ -79,6 +79,7 @@
   {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+    //좋아요 비동기
     const likeBtn = document.querySelector('#like-btn')
 
     likeBtn.addEventListener('click', function(event) {
@@ -102,6 +103,67 @@
         `
       })
     })
+  </script>
+  <script>
+    //댓글 생성 비동기
+    const commentForm = document.querySelector('#comment-form')
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
+    commentForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        axios({
+          method: 'post',
+          url: `/articles/${event.target.dataset.reviewId}/comment_create/`,
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+          data: new FormData(commentForm)
+        })
+          .then(response => {
+            console.log(response)
+            const comments = document.querySelector('#comments')
+            // 디브를 지우고 다시 넣기 위함
+            comments.textContent = "";
+            const hr = document.createElement('hr')
+            // 반복문으로 가져온 DB 데이터 [{}] 요 형태
+            const comment_data = response.data.comment_data
+            // 작성자
+            const user = response.data.user
+              for (let i = 0; i < comment_data.length; i++) {
+                const review_pk = response.data.review_pk
+                if (user === comment_data[i].id) {
+                  comments.insertAdjacentHTML('beforeend', `
+                  <div class="comment">
+                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                    <hr>
+                    <div class="comment-user-info">
+                      <img class="comment-user-image" src="${ comment_data[i].profile_image }" alt="">
+                      <div class="comment-user-detail">
+                        <h5>${ comment_data[i].profile_name }</h5>
+                        <h5>${ comment_data[i].created_at}</h5>
+                      </div>
+                    </div>
+                  </div>
+                  `);
+                } else {
+                  comments.insertAdjacentHTML('beforeend', `
+                  <div class="comment">
+                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                    <hr>
+                    <div class="comment-user-info">
+                      <img class="comment-user-image" src="${ comment_data[i].profile_image }" alt="">
+                      <div class="comment-user-detail">
+                        <h5>${ comment_data[i].profile_name }</h5>
+                        <h5>${ comment_data[i].created_at}</h5>
+                      </div>
+                    </div>
+                  </div>
+                  `);
+                          }
+                        }
+                        commentForm.reset()
+                    })
+                    .catch(console.log(1))
+                  })
   </script>
   {% endblock script %}
