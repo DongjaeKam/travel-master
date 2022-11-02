@@ -16,9 +16,7 @@
       <a class="btn btn-primary" href="{% url 'accounts:index' %}" role="button">뒤로가기</a>
       
       {% if request.user == user %}
-      
-      <a class="btn btn-outline-danger" href="{% url 'accounts:edit_profile' user.pk %}" role="button">회원 정보 수정</a>
-      
+      <a class="btn btn-outline-danger" href="{% url 'accounts:edit_profile' %}" role="button">회원 정보 수정</a>
       {% endif %}
     </div>
   </div>

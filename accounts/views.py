@@ -73,9 +73,8 @@ def signup(request):
   return render(request, 'accounts/signup.html', context)
 
 
-  #프로필 수정
+#프로필 수정
 def edit_profile(request):
-
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST ,instance=request.user)
         if form.is_valid():
