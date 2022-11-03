@@ -44,3 +44,34 @@
       // 마커가 지도 위에 표시되도록 설정합니다
       marker.setMap(map);
 </script>
+
+<script>
+  //var container = document.getElementById('map');
+    var lat = "{{lat|escapejs}}"
+    var lng = "{{lng|escapejs}}"
+
+    var mapOptions = {
+        center: new naver.maps.LatLng(lat, lng),
+        zoom: 15
+    };
+
+    var map = new naver.maps.Map('map', mapOptions);
+
+    var map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(lat, lng),
+        zoom: 15
+    });
+
+    var marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(lat, lng),
+        icon: {
+            url: '{% static '
+            images / 마커.png ' %}', //50, 68 크기의 원본 이미지
+            size: new naver.maps.Size(50, 60),
+            scaledSize: new naver.maps.Size(30, 40),
+            origin: new naver.maps.Point(0, 0),
+            anchor: new naver.maps.Point(12, 34)
+        },
+        map: map,
+        animation: naver.maps.Animation.BOUNCE
+    });
