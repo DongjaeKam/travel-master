@@ -3,33 +3,7 @@
 
 {% block content %}
 
-<div class="search-box">
-  <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
-    <input type="text" style="display:none" autocomplete="off">
-    <input type="password" style="display:none" autocomplete="off">
-    <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
-    <button class="btn btn-outline-success" type="submit">Search</button>
-  </form>
-  <div class="popular">
-    <h4 class="text-center">인기 검색어</h4>
-    <div class="popular-detail d-flex justify-content-evenly">
-      <div class="area_keyword" style="">
-      {% for p in popular%}
-          {% if forloop.counter <= 5 %}
-          <h6><a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}"><span class="badge text-bg-warning">{{ forloop.counter }}</span> {{p.title}}</h6></a>
-          {% endif %}
-      {% endfor %}
-      </div>
-      <div class="area_keyword" style="">
-      {% for p in popular%}
-          {% if forloop.counter > 5 %}
-            <h6><a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}"><span class="badge text-bg-warning">{{ forloop.counter }}</span> {{p.title}}</h6></a>
-          {% endif %}
-      {% endfor %}
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <div class="container text-center">
   <div class="row justify-content-center">
@@ -94,14 +68,4 @@
 {% endblock %}
 
 {% block script %}
-<script>
-  const searchToggle = function() {
-    document.querySelector(".popular").classList.toggle('active')
-  }
-
-  const search = document.querySelector(".search")
-
-  search.addEventListener('click', searchToggle)
-
-</script>
 {% endblock script %}
