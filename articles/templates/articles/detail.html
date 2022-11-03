@@ -2,14 +2,14 @@
 
 {% load django_bootstrap5 %}
 {% block content %}
-<div class="search-box">
-  <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
-    <input type="text" style="display:none">
-    <input type="password" style="display:none">
-    <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline-success" type="submit">Search</button>
-  </form>
-</div>
+  <div class="search-box">
+    <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
+      <input type="text" style="display:none">
+      <input type="password" style="display:none">
+      <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner bg-dark" style="">
       {% for photo in review.photo_set.all %}
@@ -19,36 +19,42 @@
         </div>
       {% endfor %}
 
-      </div>
-    
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
 
   <section class="review-main">
     <section>
       <h1 class="review-title">{{ review.title }}</h1>
-      <h4 class="review-user"><span class="fs-5">written by</span> | {{ review.user.profile_name }}</h4>
+      <h4 class="review-user">
+        <span class="fs-5">written by</span>
+        |
+        {{ review.user.profile_name }}</h4>
       <h6 class="review-updated text-muted">{{ review.updated_at }}</h6>
       <div class="heart d-flex align-items-end">
         {% if request.user not in review.like_users.all %}
-        <i data-review-id="{{ review.pk }}" id="like-btn" class="bi bi-heart"></i>
+          <i data-review-id="{{ review.pk }}" id="like-btn" class="bi bi-heart"></i>
         {% else %}
-        <i data-review-id="{{ review.pk }}" id="like-btn"  class="bi bi-heart-fill"></i>
+          <i data-review-id="{{ review.pk }}" id="like-btn" class="bi bi-heart-fill"></i>
         {% endif %}
-        <h6 class="likes text-muted">| {{ review.like_users.count }}명이 이 글을 좋아해요</h6>
+        <h6 class="likes text-muted">|
+          {{ review.like_users.count }}명이 이 글을 좋아해요</h6>
       </div>
       {% if request.user == review.user %}
-      <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-outline-danger btn-sm">수정하기</a>
+        <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-outline-danger btn-sm">수정하기</a>
       {% endif %}
       <hr>
-      <h3 class="review-place">{{ review.place }} | {{ review.theme }}</h3>
+      <h3 class="review-place">{{ review.place }}
+        |
+        {{ review.theme }}</h3>
 
     </section>
 
@@ -57,121 +63,191 @@
     </section>
   </section>
 
- 
-      
   <section class="comment-box">
-    <form id="comment-form" data-review-id="{{ review.pk }}" action="{%url 'articles:comment_create' review.pk %}" method="POST">
+    <form id="comment-form" data-review-id="{{ review.pk }}" action="{% url 'articles:comment_create' review.pk %}" method="POST">
       {% csrf_token %}
       {% bootstrap_form comment_form %}
       <input class="btn btn-success" type="submit" value="제출">
     </form>
-    
+
     <div id="comments" class="comments">
       {% for comment in comments %}
-      <div class="comment">
-        <h4>{{comment.user}} - {{ comment }}</h4>
-        <hr>
-        <div class="comment-user-info">
-          <img class="comment-user-image" src="{{ comment.user.profile_image.url }}" alt="">
-          <div class="comment-user-detail">
-            <h5>{{ comment.user.profile_name }}</h5>
-            <h5>{{ comment.created_at }}</h5>
+        <div class="comment">
+          <h4>{{comment.user}}
+            -
+            {{ comment }}</h4>
+          <hr>
+          <div class="comment-user-info">
+            <img class="comment-user-image" src="{{ comment.user.profile_image.url }}" alt="">
+            <div class="comment-user-detail">
+              <h5>{{ comment.user.profile_name }}</h5>
+              <h5>{{ comment.created_at }}</h5>
+            </div>
+            {% if request.user.pk == comment.user.pk %}
+              <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-{{ comment.pk }}" data-reviewdel-id="{{ review.pk }}" data-commentdel-id="{{ comment.pk }}">삭제</button>
+            {% endif %}
           </div>
         </div>
-      </div>
       {% endfor %}
     </div>
 
   {% endblock %}
 
   {% block script %}
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    //좋아요 비동기
-    const likeBtn = document.querySelector('#like-btn')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      //좋아요 비동기
+      const likeBtn = document.querySelector('#like-btn')
 
-    likeBtn.addEventListener('click', function(event) {
-      console.log(event.target.dataset)
-      axios({
-        method: 'get',
-        url: `/articles/${event.target.dataset.reviewId}/like/`,
-      })
-      .then(response => {
-        console.log(response.data)
-        if (response.data.isLike === true) {
-          event.target.classList.add('bi-heart-fill')
-          event.target.classList.remove('bi-heart')
-        } else {
-          event.target.classList.add('bi-heart')
-          event.target.classList.remove('bi-heart-fill')
-        }
-        const likeCount = document.querySelector('.likes')
-        likeCount.innerHTML=`
+      likeBtn.addEventListener('click', function (event) {
+        console.log(event.target.dataset)
+        axios({method: 'get', url: `/articles/${event.target.dataset.reviewId}/like/`}).then(response => {
+          console.log(response.data)
+          if (response.data.isLike === true) {
+            event
+              .target
+              .classList
+              .add('bi-heart-fill')
+            event
+              .target
+              .classList
+              .remove('bi-heart')
+          } else {
+            event
+              .target
+              .classList
+              .add('bi-heart')
+            event
+              .target
+              .classList
+              .remove('bi-heart-fill')
+          }
+          const likeCount = document.querySelector('.likes')
+          likeCount.innerHTML = `
           <h6 class="likes m-0 text-muted ">| ${response.data.likeCount}명이 이 글을 좋아해요</h6>
         `
+        })
       })
-    })
-  </script>
-  <script>
-    //댓글 생성 비동기
-    const commentForm = document.querySelector('#comment-form')
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    </script>
+    <script>
+      //댓글 생성 비동기
+      const commentForm = document.querySelector('#comment-form')
+      const csrftoken = document
+        .querySelector('[name=csrfmiddlewaretoken]')
+        .value
 
-    commentForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+        commentForm
+        .addEventListener('submit', function (event) {
+          event.preventDefault();
+          axios({
+            method: 'post',
+            url: `/articles/${event.target.dataset.reviewId}/comment_create/`,
+            headers: {
+              'X-CSRFToken': csrftoken
+            },
+            data: new FormData(commentForm)
+          })
+            .then(response => {
+              console.log(response)
+              const comments = document.querySelector('#comments')
+              comments.textContent = "";
+              const hr = document.createElement('hr')
+              const comment_data = response.data.comment_data
+              const user = response
+                .data
+                .user
+                for (let i = 0; i < comment_data.length; i++) {
+                  const review_pk = response.data.review_pk
+                  if (user === comment_data[i].id) {
+                    comments.insertAdjacentHTML('beforeend', `
+                  <div class="comment">
+                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                    <hr>
+                    <div class="comment-user-info">
+                      <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                      <div class="comment-user-detail">
+                        <h5>${comment_data[i].profile_name}</h5>
+                        <h5>${comment_data[i].created_at}</h5>
+                      </div>
+                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                    </div>
+                  </div>
+                  `);
+                  } else {
+                    comments.insertAdjacentHTML('beforeend', `
+                    <div class="comment">
+                      <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                      <hr>
+                      <div class="comment-user-info">
+                        <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                        <div class="comment-user-detail">
+                          <h5>${comment_data[i].profile_name}</h5>
+                          <h5>${comment_data[i].created_at}</h5>
+                        </div>
+                      </div>
+                    </div>
+                  `);
+                  }
+                }
+                commentForm
+                .reset()
+            })
+            .catch(console.log(1))
+          })
+    </script>
+    <script>
+      // 댓글 삭제 비동기
+      const delete_comment = (e) => {
+        const comment_id = document
+          .querySelector(`#${e.id}`)
+          .id;
         axios({
           method: 'post',
-          url: `/articles/${event.target.dataset.reviewId}/comment_create/`,
+          url: `/articles/${event.target.dataset.reviewdelId}/comment_delete/${event.target.dataset.commentdelId}/delete`,
           headers: {
             'X-CSRFToken': csrftoken
-          },
-          data: new FormData(commentForm)
+          }
+        }).then(response => {
+          console.log(response)
+          const comments = document.querySelector('#comments')
+          comments.textContent = "";
+          const hr = document.createElement('hr')
+          const comment_data = response.data.comment_data
+          const user = response.data.user
+          for (let i = 0; i < comment_data.length; i++) {
+            const review_pk = response.data.review_pk
+            if (user === comment_data[i].id) {
+              comments.insertAdjacentHTML('beforeend', `
+                <div class="comment">
+                  <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                  <hr>
+                  <div class="comment-user-info">
+                    <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                    <div class="comment-user-detail">
+                      <h5>${comment_data[i].profile_name}</h5>
+                      <h5>${comment_data[i].created_at}</h5>
+                    </div>
+                    <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                  </div>
+                </div>
+                `);
+            } else {
+              comments.insertAdjacentHTML('beforeend', `
+                <div class="comment">
+                  <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                  <hr>
+                  <div class="comment-user-info">
+                    <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                    <div class="comment-user-detail">
+                      <h5>${comment_data[i].profile_name}</h5>
+                      <h5>${comment_data[i].created_at}</h5>
+                    </div>
+                  </div>
+                </div>
+                `);
+            }
+          }
         })
-          .then(response => {
-            console.log(response)
-            const comments = document.querySelector('#comments')
-            // 디브를 지우고 다시 넣기 위함
-            comments.textContent = "";
-            const hr = document.createElement('hr')
-            // 반복문으로 가져온 DB 데이터 [{}] 요 형태
-            const comment_data = response.data.comment_data
-            // 작성자
-            const user = response.data.user
-              for (let i = 0; i < comment_data.length; i++) {
-                const review_pk = response.data.review_pk
-                if (user === comment_data[i].id) {
-                  comments.insertAdjacentHTML('beforeend', `
-                  <div class="comment">
-                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                    <hr>
-                    <div class="comment-user-info">
-                      <img class="comment-user-image" src="${ comment_data[i].profile_image }" alt="">
-                      <div class="comment-user-detail">
-                        <h5>${ comment_data[i].profile_name }</h5>
-                        <h5>${ comment_data[i].created_at}</h5>
-                      </div>
-                    </div>
-                  </div>
-                  `);
-                } else {
-                  comments.insertAdjacentHTML('beforeend', `
-                  <div class="comment">
-                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                    <hr>
-                    <div class="comment-user-info">
-                      <img class="comment-user-image" src="${ comment_data[i].profile_image }" alt="">
-                      <div class="comment-user-detail">
-                        <h5>${ comment_data[i].profile_name }</h5>
-                        <h5>${ comment_data[i].created_at}</h5>
-                      </div>
-                    </div>
-                  </div>
-                  `);
-                          }
-                        }
-                        commentForm.reset()
-                    })
-                    .catch(console.log(1))
-                  })
-  </script>
+      }
+    </script>
   {% endblock script %}
