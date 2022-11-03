@@ -2,14 +2,14 @@
 {% block content %}
 {% load static %}
 {% comment %} 검색바 {% endcomment %}
-  <div class="search-box">
+  {% comment %} <div class="search-box">
     <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
       <input type="text" style="display:none">
       <input type="password" style="display:none">
       <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
-  </div>
+  </div> {% endcomment %}
 
   <main class="container  my-3" style="border-radius:2%; width:920px;">
     {% comment %} 메인 페이지 윗단 {% endcomment %}
@@ -45,7 +45,7 @@
       {% comment %} 인기검색어 {% endcomment %}
       <div class=" col-5" style="border-radius:2%;">
           <h3 class="text-center">인기 검색어</h3>
-          {% for p in popular_search%}
+          {% for p in popular %}
             <div class="area_keyword" style="">
               <ul id="p_search_hd1" style="list-style:none">
                 <li>

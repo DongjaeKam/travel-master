@@ -27,7 +27,7 @@ def index(request):
     context = {
         "pop_photos": pop_photos,
         "reviews": reviews,
-        "popular_search": popular_search,
+        "popular": popular_search,
     }
     return render(request, "articles/index.html", context)
 
@@ -70,6 +70,7 @@ def delete(request, pk):
 
 
 def detail(request, pk):
+    popular = Search.objects.order_by("-count")[:10]
     review = get_object_or_404(Review, pk=pk)
     photos = review.photo_set.all()
     comments = Comment.objects.filter(review_id=pk)
@@ -82,6 +83,7 @@ def detail(request, pk):
         "comment_form": comment_form,
         "comments": comments,
         "photos": photos,
+        "popular" :popular,
     }
     return render(request, "articles/detail.html", context)
 

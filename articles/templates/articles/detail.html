@@ -2,14 +2,7 @@
 
 {% load django_bootstrap5 %}
 {% block content %}
-  <div class="search-box">
-    <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
-      <input type="text" style="display:none">
-      <input type="password" style="display:none">
-      <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-  </div>
+
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner bg-dark" style="">
       {% for photo in review.photo_set.all %}
