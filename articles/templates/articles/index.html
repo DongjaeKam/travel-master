@@ -22,34 +22,5 @@
     </div>
   {% endfor %}
 
-  <div class="container text-center">
-    <div class="row justify-content-center">
-      {% for r in review %}
-        <div class="col-12 col-sm-6 col-md-4">
-          <div class="card">
-            <div class="index-card-image-box">
-              {% for photo in r.photo_set.all %}
-                {% if forloop.first %}
-                  <img class="index-card-image" src="{{ photo.image.url }}" alt="">
-                {% endif %}
-              {% endfor %}
-            </div>
-            <div class="card-body">
-              <h4 class="card-title fw-bold m-0">{{r.title}}</h4>
-              <p class="m-0">written by.
-                {{r.user.profile_name}}</p>
-              <p class="date m-0 text-muted">{{r.updated_at|date:"Y-m-d"}}</p>
-              <p class="m-0">{{r.place}}
-                |
-                {{r.theme}}</p>
-              <p class="mb-3 text-muted">{{ r.like_users.count }}
-                명이 이 글을 좋아합니다</p>
-              <a href="{% url 'articles:review_detail' r.pk %}" class="btn btn-warning">더 보기</a>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
 
 {% endblock %}

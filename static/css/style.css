@@ -15,7 +15,7 @@
   transition: all 0.5s ease;
 }
 
-/* article.index */
+/* article.search */
 .search-box{
   position:sticky;
   z-index: 100;
@@ -29,18 +29,18 @@
   width: 80%;
 }
 
-.card{
+.search-card{
   margin: 1.5rem;
   border: 0px;
   box-shadow: 6px 8px 7px rgb(242, 232, 225);
 }
 
-.index-card-image-box{
+.search-card-image-box{
   height: 300px;
   background-color: rgb(184, 184, 184);
 }
 
-.index-card-image{
+.search-card-image{
   height: 300px;
 }
 
