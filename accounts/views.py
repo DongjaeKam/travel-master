@@ -1,3 +1,5 @@
+
+from random import randint
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -12,6 +14,11 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+import smtplib
+from email.mime.text import MIMEText
+
+global code
+global password_user
 
 # Create your views here.
 
@@ -45,14 +52,10 @@ def login(request):
     }
     return render(request, 'accounts/login.html', context)
 
-
-
-
 # 로그아웃 페이지
 def logout(request):
     auth_logout(request)
     return redirect('accounts:login')
-
 
 # 개인 프로필 페이지
 def detail(request,pk):
@@ -116,7 +119,7 @@ def edit_profile(request,pk):
 
       return render(request,'accounts/edit_profile.html',context)
     else:
-      return render(request,'accounts/wrong_approach')
+      return render(request,'articles/index.html')
 
 @login_required
 def change_password(request,pk):
@@ -143,7 +146,7 @@ def change_password(request,pk):
 
       return render(request, 'accounts/change_password.html',context)
     else:
-      return render(request,'accounts/wrong_approach')
+      return render(request,'articles/index.html')
 
 # follow
 @login_required
@@ -166,5 +169,107 @@ def follow(request, pk):
 
   return JsonResponse(data)
 
-def wrong_approach(request):
-  return render(request,'accounts/wrong_approach')
+@csrf_exempt
+
+def find_password(request,step):
+
+    global code
+    global password_user
+
+    if step == 1:
+
+      context = {
+
+        'step': 1,
+
+      }
+
+      return render(request,'accounts/find_password.html',context)
+    
+    elif step == 2 :
+
+      code = str(10000000 + randint(1,89999999))   
+      
+      if request.method == 'POST':
+        
+        email = request.POST['email']
+        
+        print('email : ' + email )
+
+        password_user = get_user_model().objects.get(email = email)
+
+        # 세션 생성
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        # TLS 보안 시작
+        s.starttls()
+        # 로그인 인증()
+        
+        s.login('TravelMasterSTMP2022', 'plqkcjzguzvxkqqn')
+        # 보낼 메시지 설정
+        
+       
+        code = str(10000000 + randint(1,89999999))
+
+        msg = MIMEText('인증 코드 : '+ code )
+        msg['Subject'] = '여행 석사 메일 인증 메시지'
+        
+        # 메일 보내기
+        if request.POST['email']:
+          s.sendmail("TravelMasterSTMP2022@gmail.com", request.POST['email'] , msg.as_string())
+        
+        # 세션 종료
+        s.quit()
+
+      context = {
+
+        'step': 2,
+
+      }
+
+      return render(request,'accounts/find_password.html',context)
+
+
+    elif step == 3  :
+      _code= request.POST['code']     
+
+      if _code == code :
+        print('됬다. 인증 성공!')
+        redirect('accounts:find_password',4)      
+      else :
+        context = {
+
+        'step': 2,
+
+        }
+
+        return render(request,'accounts/find_password.html',context) 
+        
+
+      context = {
+
+        'step': 3,
+
+      }
+
+      return render(request,'accounts/find_password.html',context)
+
+
+    elif step == 4 :
+
+      if request.POST['password1'] == request.POST['password2']:
+        password_user.set_password(request.POST['password1'])
+        password_user.save()
+        print('비밀번호 변경 가능')
+        return redirect('accounts:login')
+      else :
+        print('비밀번호 변경 불가')
+
+        context = {
+
+        'step': 2,
+
+        }
+
+        return render(request,'accounts/find_password.html',context)
+
+      
