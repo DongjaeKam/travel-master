@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
+{% comment %} 검색바 {% endcomment %}
   <div class="search-box">
     <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
       <input type="text" style="display:none">
@@ -8,19 +10,84 @@
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
   </div>
-  <h2>인기 검색어</h2>
-  {% for p in popular_search%}
-    <div class="area_keyword" style="">
-      <ul id="p_search_hd1" style="list-style:none">
-        <li>
-          <h4>
-            <span class="num">{{ forloop.counter }}:</span>
-            {{p.title}}
-          </h4>
-        </li>
-      </ul>
-    </div>
-  {% endfor %}
+
+  <main class="container  my-3" style="border-radius:2%; width:920px;">
+    {% comment %} 메인 페이지 윗단 {% endcomment %}
+    <section class="row ">
+      {% comment %} 인기게시글 {% endcomment %}
+      <div class=" col-7" style="border-radius:2%;">  
+        <h3 class="text-center my-2">인기게시글</h3>
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" >
+          <div class="carousel-inner bg-dark" style="border-radius: 2%">
+              {% for photo in pop_photos %}
+                <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+                  <a href="{%url 'articles:review_detail' photo.review.pk %}">
+                    <img class='carousel-image index-img' src="{{ photo.image.url }}" alt="" style="border-radius: 2%">
+                  </a>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="bg-light p-2 text-dark bg-opacity-50">
+                      {{ forloop.counter }}위. {{ photo.review.title }}</h5>
+                  </div>
+                </div>
+                
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+      </div>
+      {% comment %} 인기검색어 {% endcomment %}
+      <div class=" col-5" style="border-radius:2%;">
+          <h3 class="text-center">인기 검색어</h3>
+          {% for p in popular_search%}
+            <div class="area_keyword" style="">
+              <ul id="p_search_hd1" style="list-style:none">
+                <li>
+                  <h4>
+                    <span class="num">{{ forloop.counter }}:</span>
+                    {{p.title}}
+                  </h4>
+                </li>
+              </ul>
+            </div>
+          {% endfor %}
+      </div>
+    </section>
+    {% comment %} 메인 페이지 아랫단 {% endcomment %}
+    <h3 class="text-center mt-3"> 테마별 여행지 검색 </h3>
+    <section class="row ">    
+      <div class="flip-box  col-4" style="">
+        <div class="flip">
+          <div class="front">
+            <a href="{% url 'articles:index' %}"><img class="index-img" src="{% static 'images/activity.jpg' %}" alt=""  style="border-radius:2%;"></a>
+          </div>
+          <div class="back fs-3">액티비티</div>
+        </div>
+      </div>
+      <div class="flip-box  col-4" style="">
+        <div class="flip">
+          <div class="front">
+            <a href="{% url 'articles:index' %}"><img class="index-img" src="{% static 'images/food.jpg' %}" alt=""  style="border-radius:2%;" ></a>
+          </div>
+          <div class="back fs-3">푸드</div>
+        </div>
+      </div>
+      <div class="flip-box  col-4" style="">
+        <div class="flip">
+          <div class="front">
+            <a href="{% url 'articles:index' %}"><img class="index-img" src="{% static 'images/healing.jpg' %}" alt="" style="border-radius:2%;"></a>
+          </div>
+          <div class="back fs-3">힐링</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
 
 {% endblock %}
