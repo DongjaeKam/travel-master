@@ -1,26 +1,79 @@
+/* article.index */
+
+
+.index-img {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 플립 호버 시작 */
+.flip-box {
+  width: 300px;
+  height: 400px;
+  perspective: 1000px;
+}
+
+.flip-box:hover .flip {
+  transform: rotateY(-180deg);
+}
+
+.flip {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  color: white;
+  text-align: center;
+  line-height: 400px;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: .5s;
+}
+
+.front,
+.back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+/* .front {
+  background: skyblue;
+} */
+
+.back {
+  background: orange;
+  transform: rotateY(180deg);
+}
+
+/* 플립 호버 끝 */
+
 /* navigation bar */
 
-.nav-logo{
+.nav-logo {
   width: 3.5rem;
   margin-right: 1rem;
 }
 
-.nav-login-name{
+.nav-login-name {
   text-decoration: none;
-  color: rgb(112,112,113);
+  color: rgb(112, 112, 113);
 }
 
-.nav-login-name:hover{
+.nav-login-name:hover {
   color: black;
   transition: all 0.5s ease;
 }
 
 /* article.search */
-.search-box{
-  position:sticky;
+.search-box {
+  position: sticky;
   z-index: 100;
-  top:0px;
-  padding:1rem;
+  top: 0px;
+  padding: 1rem;
   background-color: rgb(242, 232, 225);
 }
 
@@ -42,6 +95,7 @@
   background-color: rgb(236, 236, 236);
 }
 
+/* 캐러셀 클래스명과 같아 논의 필요함 */
 .active{
   display:block;
 }
@@ -58,122 +112,125 @@
 }
 
 .search-card{
+
   margin: 1.5rem;
   border: 0px;
   box-shadow: 6px 8px 7px rgb(242, 232, 225);
 }
 
-.search-card-image-box{
+.search-card-image-box {
   height: 300px;
   width: 100%;
   background-color: rgb(184, 184, 184);
 }
 
-.search-card-image{
+.search-card-image {
   height: 300px;
   width: 100%;
 }
 
 
 /* accounts.detail 페이지 */
-.detail-user{
-  margin: 2rem 0 ;
+.detail-user {
+  margin: 2rem 0;
 }
 
-.detail-user-info{
-  display:flex;
+.detail-user-info {
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.detail-user-image{
+.detail-user-image {
   width: 20rem;
   height: 20rem;
   border-radius: 50%;
 }
 
-.detail-user-words{
+.detail-user-words {
   margin-left: 2rem;
 }
 
 
 @media only screen and (max-width: 800px) {
-  .detail-user-info{
+  .detail-user-info {
     flex-direction: column;
   }
 
-  .detail-user-words{
+  .detail-user-words {
     margin: 2rem 0;
   }
 
-  .detail-user-image{
+  .detail-user-image {
     width: 15rem;
     height: 15rem;
   }
-  .detail-user-cate{
+
+  .detail-user-cate {
     font-size: 1.2rem;
   }
 }
 
 /* follow */
 
-#follow-cnt{
+#follow-cnt {
   display: flex;
 }
 
-.follow{
+.follow {
   margin: 1rem 1rem;
 }
 
 /* detail.page review */
-.user-page-review{
+.user-page-review {
   margin: 1rem 0;
 }
 
-.user-page-review-image{
+.user-page-review-image {
   margin-right: 1rem;
   width: 200px;
   height: 150px;
 }
 
 /* review.detail */
-.carousel-item{
-  position:relative;
-  height:400px;
-  background-color: rgb(112,112,113);
+.carousel-item {
+  position: relative;
+  height: 400px;
+  background-color: rgb(112, 112, 113);
 }
 
-.carousel-image{
+.carousel-image {
   position: absolute;
   left: 50%;
   transform: translate(-50%);
   height: 100%;
 }
 
-.review-main{
+.review-main {
   margin: 2rem 4rem;
   padding: 2rem;
   border-radius: 10px;
   background-color: rgb(240, 240, 240);
 }
 
-.bi-heart, .bi-heart-fill{
+.bi-heart,
+.bi-heart-fill {
   margin-right: 1rem;
   color: rgb(236, 100, 8);
   font-size: 1.5rem;
 }
 
-.bi-heart:hover, 
-.bi-heart-fill:hover{
+.bi-heart:hover,
+.bi-heart-fill:hover {
   cursor: pointer;
 }
 
-.comment-box{
+.comment-box {
   margin: 2rem 4rem;
   padding: 2rem;
 }
 
-.comment{
+.comment {
   margin: 1.5rem 2rem;
   padding: 1rem;
   border-radius: 10px;
@@ -185,7 +242,7 @@
   align-items: center;
 }
 
-.comment-user-image{
+.comment-user-image {
   margin-right: 1rem;
   width: 4rem;
   height: 4rem;

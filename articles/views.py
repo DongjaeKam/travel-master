@@ -15,9 +15,18 @@ from django.contrib.auth import get_user_model
 
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
-    review = Review.objects.all()
+    reviews = Review.objects.all()[:10]
+
+    pop_photos = []
+    cnt = 1
+    for review in reviews:
+
+        if review.photo_set.all():
+            pop_photos.append(review.photo_set.all()[0])
+
     context = {
-        "review": review,
+        "pop_photos": pop_photos,
+        "reviews": reviews,
         "popular_search": popular_search,
     }
     return render(request, "articles/index.html", context)
@@ -245,7 +254,7 @@ def comment_delete(request, review_pk, comment_pk):
 
 # 지도 테스트 용
 def map(request):
-    return render(request,"articles/map.html")
+    return render(request, "articles/map.html")
     # restaurant = get_object_or_404(Restaurant, pk=pk)
     # client_id = '7apalzu8wx';    # 본인이 할당받은 ID 입력
     # client_pw = 'LpKKb9dnZwQUKjkeDuXDZ6n3NgeD1uN50pvk9MYj';    # 본인이 할당받은 Secret 입력
@@ -261,7 +270,7 @@ def map(request):
     # res = requests.get(url, headers=headers)
     # lat = str(res.json()['addresses'][0]['y'])
     # lng = str(res.json()['addresses'][0]['x'])
- 
+
     # context = {
     #     'lat' : lat,
     #     'lng' : lng,
@@ -269,6 +278,8 @@ def map(request):
     # return render(request, 'restaurants/detail.html', context)
 
     return render(request, "articles/map.html")
+
+
 def map2(request):
     return render(request, "articles/map2.html")
 
@@ -289,4 +300,3 @@ def like(request, pk):
     }
 
     return JsonResponse(data)
-
