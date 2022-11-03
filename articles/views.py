@@ -10,15 +10,18 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import datetime
+from django.contrib.auth import get_user_model
+
 
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
     review = Review.objects.all()
     context = {
         "review": review,
-        "popular_search":popular_search,
+        "popular_search": popular_search,
     }
     return render(request, "articles/index.html", context)
+
 
 @login_required(login_url="accounts:login")
 def create(request):
@@ -49,6 +52,7 @@ def create(request):
     }
     return render(request, "articles/create.html", context)
 
+
 @login_required
 def delete(request, pk):
     review = Review.objects.get(pk=pk)
@@ -71,6 +75,7 @@ def detail(request, pk):
         "photos": photos,
     }
     return render(request, "articles/detail.html", context)
+
 
 @login_required
 def update(request, pk):
@@ -107,7 +112,7 @@ def update(request, pk):
         }
         return render(request, "articles/create.html", context)
     else:
-        return redirect('accounts:wrong_approach')
+        return redirect("accounts:wrong_approach")
 
 
 def search(request):
@@ -117,7 +122,9 @@ def search(request):
 
         if not search.isdigit():
             if Review.objects.filter(
-                Q(title__icontains=search) | Q(content__icontains=search) | Q(place__icontains=search)
+                Q(title__icontains=search)
+                | Q(content__icontains=search)
+                | Q(place__icontains=search)
             ):
                 popular_list[search] = popular_list.get(search, 0) + 1
 
@@ -136,7 +143,9 @@ def search(request):
             | Q(content__icontains=search)
             | Q(place__icontains=search)
             | Q(theme__icontains=search)
+            | Q(user_id__profile_name__icontains=search)
         )
+
         if search:
             if search_list:
 
@@ -162,8 +171,10 @@ def search(request):
             context = {"v": k}
             return render(request, "articles/searchfail.html", context)
 
+
 def searchfail(request):
     return render(request, "articles/searchfail.html")
+
 
 # 댓글생성
 @login_required(login_url="accounts:login")
@@ -181,23 +192,25 @@ def comment_create(request, pk):
         comment.user = request.user
         comment.save()
     # 제이슨은 객체 형태로 받질 않음 그래서 리스트 형태로 전환을 위해 리스트 생성
-    temp = Comment.objects.filter(review_id=pk).order_by('-pk')
+    temp = Comment.objects.filter(review_id=pk).order_by("-pk")
     comment_data = []
     for t in temp:
-        t.created_at = t.created_at.strftime('%Y-%m-%d %H:%M')
-        comment_data.append({
-            'id': t.user_id, 
-            'userName': t.user.username, 
-            'content': t.content,
-            'commentPk': t.pk,
-            'created_at':t.created_at,
-            'profile_name':t.user.profile_name,
-            'profile_image':t.user.profile_image.url,
-        })
+        t.created_at = t.created_at.strftime("%Y-%m-%d %H:%M")
+        comment_data.append(
+            {
+                "id": t.user_id,
+                "userName": t.user.username,
+                "content": t.content,
+                "commentPk": t.pk,
+                "created_at": t.created_at,
+                "profile_name": t.user.profile_name,
+                "profile_image": t.user.profile_image.url,
+            }
+        )
     context = {
-        'comment_data': comment_data,
-        'review_pk': pk,
-        'user': user,
+        "comment_data": comment_data,
+        "review_pk": pk,
+        "user": user,
     }
     return JsonResponse(context)
     # if request.method == "POST":
@@ -210,6 +223,7 @@ def comment_create(request, pk):
     #     return redirect("articles:review_detail", pk)
     # else:
     #     return redirect("articles:review_detail", pk)
+
 
 # 지도 테스트 용
 def map(request):
@@ -235,12 +249,15 @@ def map(request):
     #     'lng' : lng,
     # }
     # return render(request, 'restaurants/detail.html', context)
+
+    return render(request, "articles/map.html")
 def map2(request):
-    return render(request,"articles/map2.html")
+    return render(request, "articles/map2.html")
+
 
 # 좋아요 기능
-def like(request,pk):
-    review = Review.objects.get(pk = pk)
+def like(request, pk):
+    review = Review.objects.get(pk=pk)
     if request.user not in review.like_users.all():
         review.like_users.add(request.user)
         is_like = True
@@ -249,9 +266,9 @@ def like(request,pk):
         is_like = False
 
     data = {
-        'isLike' : is_like,
-        'likeCount' : review.like_users.count(),
+        "isLike": is_like,
+        "likeCount": review.like_users.count(),
     }
-    
+
     return JsonResponse(data)
 

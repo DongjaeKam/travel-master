@@ -57,11 +57,13 @@ def logout(request):
 # 개인 프로필 페이지
 def detail(request,pk):
   user = get_user_model().objects.get(pk = pk)
+  rank_percent = (user.rank % 10) * 10
   context = {
     'user': user,
     'followers': user.followers.all(), 
     'followings': user.followings.all(),
     'reviews': user.review_set.all(),
+    'rank_percent' : rank_percent
   }
 
   return render(request,'accounts/detail.html', context)
