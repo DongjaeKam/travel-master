@@ -9,12 +9,20 @@
     <img class="detail-user-image" src="{{ user.profile_image.url }}" alt="{{ user.profile_image }}">
     <div class='detail-user-words'>
       <h3 class='detail-user-cate'>닉네임: {{ user.profile_name }}</h3>
-      <h3 class='detail-user-cate'>유저 등급: {% if user.rank < 10 %} 새싹 {% elif 10 <= user.rank < 20 %} 일반 {% elif 20 <= user.rank < 30 %} 성실 {% elif 30 <= user.rank < 40 %} 열심 {% elif 40 <= user.rank < 50 %} 우수 {% else %} 감사 {% endif %}</h3>
+      <h3 class='detail-user-cate'>유저 등급: 
+        {% if user.rank >= 50 %} <i class="bi bi-5-square-fill text-primary"></i> 레벨5 
+        {% elif user.rank >= 40 %} <i class="bi bi-4-square-fill text-secondary"></i> 레벨4 
+        {% elif user.rank >= 30 %} <i class="bi bi-3-square-fill text-success"></i> 레벨3
+        {% elif user.rank >= 20 %} <i class="bi bi-2-square-fill text-danger"></i> 레벨2
+        {% elif user.rank >= 10 %} <i class="bi bi-1-square-fill text-warning"></i> 레벨1
+        {% endif %}</h3>
+        <div class="my-1 progress">
+          <div class="progress-bar" role="progressbar" aria-label="Example with label" style="width: {{ rank_percent }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ rank_percent }}%</div>
+        </div>
       <h3 class='detail-user-cate'>이메일 주소: {{ user.email }}</h3>
       <h3 class='detail-user-cate'>유저 이름: {{ user.last_name }} {{ user.first_name }} </h3>
       <h3 class='detail-user-cate'>가입한 날짜: {{ user.date_joined.date }}</h3>
       <a class="btn btn-primary" href="{% url 'articles:index' %}" role="button">뒤로가기</a>
-      
       {% if request.user == user %}
       <a class="btn btn-outline-danger" href="{% url 'accounts:edit_profile' user.pk %}" role="button">회원 정보 수정</a>
       {% endif %}
