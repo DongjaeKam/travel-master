@@ -213,16 +213,6 @@ def comment_create(request, pk):
         "user": user,
     }
     return JsonResponse(context)
-    # if request.method == "POST":
-    #     comment_form = CommentForm(request.POST)
-    #     if comment_form.is_valid():
-    #         comment = comment_form.save(commit=False)
-    #         comment.user = request.user
-    #         comment.review = review
-    #         comment.save()
-    #     return redirect("articles:review_detail", pk)
-    # else:
-    #     return redirect("articles:review_detail", pk)
 # 댓글삭제
 @login_required(login_url="accounts:login")
 def comment_delete(request, review_pk, comment_pk):

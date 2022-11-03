@@ -51,7 +51,8 @@
           {{ review.like_users.count }}명이 이 글을 좋아해요</h6>
       </div>
       {% if request.user == review.user %}
-        <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-outline-danger btn-sm">수정하기</a>
+        <a href="{% url 'articles:review_update' review.pk %}" class="btn btn-outline-primary btn-sm">수정하기</a>
+        <a href="{% url 'articles:review_delete' review.pk %}" class="btn btn-outline-danger btn-sm">삭제하기</a>
       {% endif %}
       <hr>
       <h3 class="review-place">{{ review.place }}
