@@ -37,10 +37,12 @@
       <h4 class="review-user"><span class="fs-5">written by</span> | {{ review.user.profile_name }}</h4>
       <h6 class="review-updated text-muted">{{ review.updated_at }}</h6>
       <div class="heart d-flex align-items-end">
+        {% if request.user.is_authenticated %}
         {% if request.user not in review.like_users.all %}
-        <i data-review-id="{{ review.pk }}" id="like-btn" class="bi bi-heart"></i>
+        <i data-like-id="{{ review.pk }}" id="like-btn" class="bi bi-heart"></i>
         {% else %}
-        <i data-review-id="{{ review.pk }}" id="like-btn"  class="bi bi-heart-fill"></i>
+        <i data-like-id="{{ review.pk }}" id="like-btn"  class="bi bi-heart-fill"></i>
+        {% endif %}
         {% endif %}
         <h6 class="likes text-muted">| {{ review.like_users.count }}명이 이 글을 좋아해요</h6>
       </div>
@@ -60,11 +62,13 @@
  
       
   <section class="comment-box">
+    {% if request.user.is_authenticated %}
     <form id="comment-form" data-review-id="{{ review.pk }}" action="{%url 'articles:comment_create' review.pk %}" method="POST">
       {% csrf_token %}
       {% bootstrap_form comment_form %}
       <input class="btn btn-success" type="submit" value="제출">
     </form>
+    {% endif %}
     
     <div id="comments" class="comments">
       {% for comment in comments %}
@@ -94,7 +98,7 @@
       console.log(event.target.dataset)
       axios({
         method: 'get',
-        url: `/articles/${event.target.dataset.reviewId}/like/`,
+        url: `/articles/${event.target.dataset.likeId}/like/`,
       })
       .then(response => {
         console.log(response.data)
