@@ -82,7 +82,37 @@
   width: 80%;
 }
 
-.search-card {
+.popular{
+  position: absolute;
+  display: none;
+  width: 75%;
+  top: 3.6rem;
+  z-index: 100;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 1rem 4rem;
+  border-radius: 10px;
+  background-color: rgb(236, 236, 236);
+}
+
+/* 캐러셀 클래스명과 같아 논의 필요함 */
+.active{
+  display:block;
+}
+
+.popular-click{
+  font-weight: 700;
+  text-decoration: none;
+  color: rgb(121, 115, 112);
+}
+
+.popular-click:hover{
+  color: rgb(141, 74, 26);
+  transition: all 0.5s ease;
+}
+
+.search-card{
+
   margin: 1.5rem;
   border: 0px;
   box-shadow: 6px 8px 7px rgb(242, 232, 225);
@@ -90,12 +120,15 @@
 
 .search-card-image-box {
   height: 300px;
+  width: 100%;
   background-color: rgb(184, 184, 184);
 }
 
 .search-card-image {
   height: 300px;
+  width: 100%;
 }
+
 
 /* accounts.detail 페이지 */
 .detail-user {

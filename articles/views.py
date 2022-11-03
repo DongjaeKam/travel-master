@@ -222,16 +222,34 @@ def comment_create(request, pk):
         "user": user,
     }
     return JsonResponse(context)
-    # if request.method == "POST":
-    #     comment_form = CommentForm(request.POST)
-    #     if comment_form.is_valid():
-    #         comment = comment_form.save(commit=False)
-    #         comment.user = request.user
-    #         comment.review = review
-    #         comment.save()
-    #     return redirect("articles:review_detail", pk)
-    # else:
-    #     return redirect("articles:review_detail", pk)
+# 댓글삭제
+@login_required(login_url="accounts:login")
+def comment_delete(request, review_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    review_pk = Review.objects.get(pk=review_pk).pk
+    user = request.user.pk
+    comment.delete()
+    temp = Comment.objects.filter(review_id=review_pk).order_by('-pk')
+    comment_data = []
+    for t in temp:
+        t.created_at = t.created_at.strftime("%Y-%m-%d %H:%M")
+        comment_data.append(
+            {
+                "id": t.user_id,
+                "userName": t.user.username,
+                "content": t.content,
+                "commentPk": t.pk,
+                "created_at": t.created_at,
+                "profile_name": t.user.profile_name,
+                "profile_image": t.user.profile_image.url,
+            }
+        )
+    context = {
+        'comment_data': comment_data,
+        'review_pk': review_pk,
+        'user': user,
+    }
+    return JsonResponse(context)
 
 
 # 지도 테스트 용
