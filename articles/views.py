@@ -205,7 +205,12 @@ def search(request):
 
 
 def searchfail(request):
-    return render(request, "articles/searchfail.html")
+    popular_search = Search.objects.order_by("-count")[:10]
+
+    context = {
+        "popular": popular_search,
+    }
+    return render(request, "articles/searchfail.html", context)
 
 
 # 댓글생성
