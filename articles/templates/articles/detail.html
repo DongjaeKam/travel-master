@@ -30,7 +30,7 @@
       <h4 class="review-user">
         <span class="fs-5">written by</span>
         |
-        {{ review.user.profile_name }}</h4>
+        <a href="{% url 'accounts:detail' review.user.pk %}">{{ review.user.profile_name }}</a></h4>
       <h6 class="review-updated text-muted">{{ review.updated_at }}</h6>
       <div class="heart d-flex align-items-end">
         {% if request.user.is_authenticated %}
@@ -81,6 +81,11 @@
               <h5>{{ comment.created_at }}</h5>
             </div>
             {% if request.user.pk == comment.user.pk %}
+              <div id="form-comment-update-{{ comment.pk }}" style="display:none;">
+                <input id="input-{{ comment.pk }}" type="text" value="{{comment.content}}">
+                <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-{{ comment.pk }}" data-reviewup-id="{{ review.pk }}" data-commentup-id="{{ comment.pk }}">확인</button>
+              </div>
+              <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-{{ comment.pk }}" data-reviewup-id="{{ review.pk }}" data-commentup-id="{{ comment.pk }}">수정</button>
               <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-{{ comment.pk }}" data-reviewdel-id="{{ review.pk }}" data-commentdel-id="{{ comment.pk }}">삭제</button>
             {% endif %}
           </div>
@@ -155,6 +160,7 @@
                 .user
                 for (let i = 0; i < comment_data.length; i++) {
                   const review_pk = response.data.review_pk
+                  console.log(comment_data[i].id, user)
                   if (user === comment_data[i].id) {
                     comments.insertAdjacentHTML('beforeend', `
                   <div class="comment">
@@ -166,6 +172,11 @@
                         <h5>${comment_data[i].profile_name}</h5>
                         <h5>${comment_data[i].created_at}</h5>
                       </div>
+                      <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
+                        <input class="comment-box" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
+                        <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      </div>
+                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
                       <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
                     </div>
                   </div>
@@ -215,36 +226,117 @@
             const review_pk = response.data.review_pk
             if (user === comment_data[i].id) {
               comments.insertAdjacentHTML('beforeend', `
-                <div class="comment">
-                  <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                  <hr>
-                  <div class="comment-user-info">
-                    <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
-                    <div class="comment-user-detail">
-                      <h5>${comment_data[i].profile_name}</h5>
-                      <h5>${comment_data[i].created_at}</h5>
+              <div class="comment">
+                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                    <hr>
+                    <div class="comment-user-info">
+                      <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                      <div class="comment-user-detail">
+                        <h5>${comment_data[i].profile_name}</h5>
+                        <h5>${comment_data[i].created_at}</h5>
+                      </div>
+                      <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
+                        <input id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
+                        <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      </div>
+                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
                     </div>
-                    <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
                   </div>
-                </div>
                 `);
             } else {
               comments.insertAdjacentHTML('beforeend', `
-                <div class="comment">
-                  <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                  <hr>
-                  <div class="comment-user-info">
-                    <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
-                    <div class="comment-user-detail">
-                      <h5>${comment_data[i].profile_name}</h5>
-                      <h5>${comment_data[i].created_at}</h5>
-                    </div>
+              <div class="comment">
+                <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                <hr>
+                <div class="comment-user-info">
+                  <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                  <div class="comment-user-detail">
+                    <h5>${comment_data[i].profile_name}</h5>
+                    <h5>${comment_data[i].created_at}</h5>
                   </div>
                 </div>
+              </div>
                 `);
             }
           }
         })
+      }
+    </script>
+    <script>
+      // 댓글 수정 비동기
+      const ok_function = (e) => {
+        const commentId = event.target.dataset.commentupId
+        const reviewId = event.target.dataset.reviewupId
+        const inputCommentPk = document.querySelector(`#input-${commentId}`)
+
+        axios({
+          method: 'post',
+          url: `/articles/${event.target.dataset.reviewupId}/comment_update/${event.target.dataset.commentupId}/update`,
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+          data: {
+            'content': inputCommentPk.value
+          }
+        }).then(response => {
+          const comments = document.querySelector('#comments')
+          comments.textContent = "";
+          const hr = document.createElement('hr')
+          const comment_data = response.data.comment_data
+          const user = response.data.user
+          for (let i = 0; i < comment_data.length; i++) {
+            const review_pk = response.data.review_pk
+            if (user === comment_data[i].id) {
+              comments.insertAdjacentHTML('beforeend', `
+              <div class="comment">
+                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                    <hr>
+                    <div class="comment-user-info">
+                      <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                      <div class="comment-user-detail">
+                        <h5>${comment_data[i].profile_name}</h5>
+                        <h5>${comment_data[i].created_at}</h5>
+                      </div>
+                      <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
+                        <input class="comment-box" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
+                        <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      </div>
+                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                    </div>
+                  </div>
+          `);
+            } else {
+              comments.insertAdjacentHTML('beforeend', `
+              <div class="comment">
+                <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                <hr>
+                <div class="comment-user-info">
+                  <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                  <div class="comment-user-detail">
+                    <h5>${comment_data[i].profile_name}</h5>
+                    <h5>${comment_data[i].created_at}</h5>
+                  </div>
+                </div>
+              </div>
+          `);
+            }
+          }
+        })
+
+      }
+      const update_comment = (e) => {
+        const comment_id = document
+          .querySelector(`#${e.id}`)
+          .id
+        const input = document.createElement('input')
+        const comment = document.querySelector('#comment')
+        const span = document.createElement('span')
+        const comment_update_form = document.querySelector(`#form-${e.id}`)
+        const comment_update = document.querySelector(`#${e.id}`)
+        comment_update_form.style.display = ""
+        comment_update.style.display = "none"
       }
     </script>
   {% endblock script %}
