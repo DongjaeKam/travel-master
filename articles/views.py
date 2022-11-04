@@ -141,7 +141,7 @@ def search(request):
         search = request.GET.get("searched", "")
 
         if search:
-            if not search.isdigit():
+            if not search.isdigit() and not search == "":
                 if Review.objects.filter(
                     Q(title__icontains=search)
                     | Q(content__icontains=search)
