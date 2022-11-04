@@ -29,6 +29,9 @@
             <li class="nav-item">
               <a class="nav-link fw-bold" href="{% url 'articles:review_create' %}">리뷰쓰기</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold" href="{% url 'articles:list' %}">전체 게시글 보기</a>
+            </li>
           </ul>
           {% if not request.user.is_authenticated %}
             <a class="btn btn-outline-success me-3" href="{% url 'accounts:login' %}" role="button">로그인</a>

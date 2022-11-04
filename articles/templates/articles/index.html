@@ -45,19 +45,31 @@
       {% comment %} 인기검색어 {% endcomment %}
       <div class=" col-5" style="border-radius:2%;">
           <h3 class="text-center">인기 검색어</h3>
-          {% for p in popular %}
-            <div class="area_keyword" style="">
-              <ul id="p_search_hd1" style="list-style:none">
-                <li>
-                  <h4>
-                    <span class="num">{{ forloop.counter }}:</span>
-                    {{p.title}}
-                  </h4>
-                </li>
-              </ul>
+          <div class="search-box">
+            <form action="{%url 'articles:search' %}" class="search d-flex" role="search" method="">
+              <input type="text" style="display:none">
+              <input type="password" style="display:none">
+              <input class="form-control me-2" name="searched" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+          <div class="d-flex">
+            <div class="col-6 area_keyword" style="">
+              {% for p in popular%}
+                  {% if forloop.counter <= 5 %}
+                  <h3 class="my-3"><a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}"><span class="badge text-bg-warning">{{ forloop.counter }}</span> {{p.title}}</h6></a>
+                  {% endif %}
+              {% endfor %}
+              </div>
+              <div class="co1-6 area_keyword" style="">
+              {% for p in popular%}
+                  {% if forloop.counter > 5 %}
+                  <h3 class="my-3"><a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}"><span class="badge text-bg-warning">{{ forloop.counter }}</span> {{p.title}}</h6></a>
+                  {% endif %}
+              {% endfor %}
+              </div>
             </div>
-          {% endfor %}
-      </div>
+          </div>
     </section>
     {% comment %} 메인 페이지 아랫단 {% endcomment %}
     <h3 class="text-center mt-3"> 테마별 여행지 검색 </h3>
@@ -65,25 +77,26 @@
       <div class="flip-box  col-4" style="">
         <div class="flip">
           <div class="front">
-            <a href="{% url 'articles:index' %}"><img class="index-img" src="{% static 'images/activity.jpg' %}" alt=""  style="border-radius:2%;"></a>
+            <img class="index-img" src="{% static 'images/activity.jpg' %}" alt=""  style="border-radius:2%;">
           </div>
-          <div class="back fs-3">액티비티</div>
+          <div class="back fs-3"><a href="{% url 'articles:search' %}?searched=activity">액티비티</a></div>
+        </div>
+      </div></a>
+      <div class="flip-box  col-4" style="">
+        <div class="flip">
+          <div class="front">
+            <img class="index-img" src="{% static 'images/food.jpg' %}" alt=""  style="border-radius:2%;" >
+          </div>
+          <div class="back fs-3"><a href="{% url 'articles:search' %}?searched=food">푸드</a></div>
         </div>
       </div>
       <div class="flip-box  col-4" style="">
         <div class="flip">
           <div class="front">
-            <a href="{% url 'articles:index' %}"><img class="index-img" src="{% static 'images/food.jpg' %}" alt=""  style="border-radius:2%;" ></a>
+            <img class="index-img" src="{% static 'images/healing.jpg' %}" alt="" style="border-radius:2%;"></a>
           </div>
-          <div class="back fs-3">푸드</div>
-        </div>
-      </div>
-      <div class="flip-box  col-4" style="">
-        <div class="flip">
-          <div class="front">
-            <a href="{% url 'articles:index' %}"><img class="index-img" src="{% static 'images/healing.jpg' %}" alt="" style="border-radius:2%;"></a>
-          </div>
-          <div class="back fs-3">힐링</div>
+          
+          <div class="back fs-3"><a href="{% url 'articles:search' %}?searched=healing">힐링</a></div>
         </div>
       </div>
     </section>
