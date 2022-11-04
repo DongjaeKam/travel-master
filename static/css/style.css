@@ -1,17 +1,13 @@
 /* a 링크 효과 없애기 */
 
-a:link {
-  color: black;
-  text-decoration: none;
-}
-
-a:visited {
-  color: black;
+a{
+  color:rgb(99, 41, 0);
   text-decoration: none;
 }
 
 a:hover {
-  color: black;
+  color: rgb(36, 14, 0);
+  font-weight: bold;
   text-decoration: none;
 }
 
@@ -139,7 +135,7 @@ a:hover {
 }
 
 
-.active {
+.show {
   display: block;
 }
 
@@ -236,6 +232,8 @@ a:hover {
   height: 150px;
   border-radius: 2%;
 }
+
+
 
 /* review.detail */
 .carousel-item {
