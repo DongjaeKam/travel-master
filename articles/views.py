@@ -15,12 +15,12 @@ from django.contrib.auth import get_user_model
 
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
-    reviews = Review.objects.all()[:10]
+    reviews = Review.objects.order_by("-like_users")[:10]
 
     pop_photos = []
     cnt = 1
-    for review in reviews:
 
+    for review in reviews:
         if review.photo_set.all():
             pop_photos.append(review.photo_set.all()[0])
 
@@ -30,6 +30,15 @@ def index(request):
         "popular": popular_search,
     }
     return render(request, "articles/index.html", context)
+
+
+def list(request):
+
+    reviews = Review.objects.all()
+
+    context = {"boards": reviews}
+
+    return render(request, "articles/search.html", context)
 
 
 @login_required(login_url="accounts:login")
@@ -83,7 +92,7 @@ def detail(request, pk):
         "comment_form": comment_form,
         "comments": comments,
         "photos": photos,
-        "popular" :popular,
+        "popular": popular,
     }
     return render(request, "articles/detail.html", context)
 
@@ -224,6 +233,8 @@ def comment_create(request, pk):
         "user": user,
     }
     return JsonResponse(context)
+
+
 # 댓글삭제
 @login_required(login_url="accounts:login")
 def comment_delete(request, review_pk, comment_pk):
@@ -231,7 +242,7 @@ def comment_delete(request, review_pk, comment_pk):
     review_pk = Review.objects.get(pk=review_pk).pk
     user = request.user.pk
     comment.delete()
-    temp = Comment.objects.filter(review_id=review_pk).order_by('-pk')
+    temp = Comment.objects.filter(review_id=review_pk).order_by("-pk")
     comment_data = []
     for t in temp:
         t.created_at = t.created_at.strftime("%Y-%m-%d %H:%M")
@@ -247,9 +258,9 @@ def comment_delete(request, review_pk, comment_pk):
             }
         )
     context = {
-        'comment_data': comment_data,
-        'review_pk': review_pk,
-        'user': user,
+        "comment_data": comment_data,
+        "review_pk": review_pk,
+        "user": user,
     }
     return JsonResponse(context)
 
