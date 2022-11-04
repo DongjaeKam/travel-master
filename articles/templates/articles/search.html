@@ -57,39 +57,41 @@
   </div>
 </div>
 
+{% if request.resolver_match.url_name != 'list' %}
 
-<div class="row mt-2">
-  <div class="col-12 my-5">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        {% if boards.has_previous %}
+  <div class="row mt-2">
+    <div class="col-12 my-5">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if boards.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?searched={{ search }}&p={{ boards.previous_page_number }}">이전</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#">이전</a>
+            </li>
+          {% endif %}
           <li class="page-item">
-            <a class="page-link" href="?searched={{ search }}&p={{ boards.previous_page_number }}">이전</a>
+            <a class="page-link" href="#">{{ boards.number }}
+              /
+              {{ boards.paginator.num_pages }}</a>
           </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#">이전</a>
-          </li>
-        {% endif %}
-        <li class="page-item">
-          <a class="page-link" href="#">{{ boards.number }}
-            /
-            {{ boards.paginator.num_pages }}</a>
-        </li>
-        {% if boards.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?searched={{ search }}&p={{ boards.next_page_number }}">다음</a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#">다음</a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
+          {% if boards.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?searched={{ search }}&p={{ boards.next_page_number }}">다음</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#">다음</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
   </div>
-</div>
 
+{% endif %}
 
 {% endblock %}
 
