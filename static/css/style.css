@@ -1,4 +1,26 @@
+/* a 링크 효과 없애기 */
+
+a:link {
+  color: black;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
+  text-decoration: none;
+}
+
+a:hover {
+  color: black;
+  text-decoration: none;
+}
+
 /* article.index */
+
+.theme-overlay {
+  height: 100%;
+  width: 100%;
+}
 
 
 .index-img {
@@ -103,7 +125,7 @@
   font-weight: bold;
 }
 
-.popular{
+.popular {
   position: absolute;
   display: none;
   width: 75%;
@@ -116,23 +138,23 @@
   background-color: rgb(236, 236, 236);
 }
 
-/* 캐러셀 클래스명과 같아 논의 필요함 */
-.active{
-  display:block;
+
+.active {
+  display: block;
 }
 
-.popular-click{
+.popular-click {
   font-weight: 700;
   text-decoration: none;
   color: rgb(121, 115, 112);
 }
 
-.popular-click:hover{
+.popular-click:hover {
   color: rgb(141, 74, 26);
   transition: all 0.5s ease;
 }
 
-.search-card{
+.search-card {
 
   margin: 1.5rem;
   border: 0px;
@@ -192,6 +214,7 @@
   }
 }
 
+
 /* follow */
 
 #follow-cnt {
@@ -211,6 +234,7 @@
   margin-right: 1rem;
   width: 200px;
   height: 150px;
+  border-radius: 2%;
 }
 
 /* review.detail */

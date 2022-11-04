@@ -15,12 +15,12 @@ from django.contrib.auth import get_user_model
 
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
-    reviews = Review.objects.all()[:10]
+    reviews = Review.objects.order_by("-like_users")[:10]
 
     pop_photos = []
     cnt = 1
-    for review in reviews:
 
+    for review in reviews:
         if review.photo_set.all():
             pop_photos.append(review.photo_set.all()[0])
 
@@ -30,6 +30,15 @@ def index(request):
         "popular": popular_search,
     }
     return render(request, "articles/index.html", context)
+
+
+def list(request):
+
+    reviews = Review.objects.all()
+
+    context = {"boards": reviews}
+
+    return render(request, "articles/search.html", context)
 
 
 @login_required(login_url="accounts:login")
@@ -83,7 +92,7 @@ def detail(request, pk):
         "comment_form": comment_form,
         "comments": comments,
         "photos": photos,
-        "popular" :popular,
+        "popular": popular,
     }
     return render(request, "articles/detail.html", context)
 
@@ -132,7 +141,7 @@ def search(request):
         search = request.GET.get("searched", "")
         sort = request.GET.get("sorted", "")
         
-        if not search.isdigit():
+        if not search.isdigit() and not search == "":
             if Review.objects.filter(
                 Q(title__icontains=search)
                 | Q(content__icontains=search)
@@ -236,6 +245,8 @@ def comment_create(request, pk):
         "user": user,
     }
     return JsonResponse(context)
+
+
 # 댓글삭제
 @login_required(login_url="accounts:login")
 def comment_delete(request, review_pk, comment_pk):
@@ -243,6 +254,38 @@ def comment_delete(request, review_pk, comment_pk):
     review_pk = Review.objects.get(pk=review_pk).pk
     user = request.user.pk
     comment.delete()
+    temp = Comment.objects.filter(review_id=review_pk).order_by("-pk")
+    comment_data = []
+    for t in temp:
+        t.created_at = t.created_at.strftime("%Y-%m-%d %H:%M")
+        comment_data.append(
+            {
+                "id": t.user_id,
+                "userName": t.user.username,
+                "content": t.content,
+                "commentPk": t.pk,
+                "created_at": t.created_at,
+                "profile_name": t.user.profile_name,
+                "profile_image": t.user.profile_image.url,
+            }
+        )
+    context = {
+        "comment_data": comment_data,
+        "review_pk": review_pk,
+        "user": user,
+    }
+    return JsonResponse(context)
+
+@login_required(login_url="accounts:login")
+def comment_update(request, review_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    comment_username = comment.user.username
+    user = request.user.pk
+    review_pk = Review.objects.get(pk=review_pk).pk
+    jsonObject = json.loads(request.body)
+    if request.method == 'POST':
+        comment.content = jsonObject.get('content')
+        comment.save()
     temp = Comment.objects.filter(review_id=review_pk).order_by('-pk')
     comment_data = []
     for t in temp:
@@ -260,12 +303,12 @@ def comment_delete(request, review_pk, comment_pk):
         )
     context = {
         'comment_data': comment_data,
+        'comment_pk': comment_pk,
+        'comment_username': comment_username,
         'review_pk': review_pk,
         'user': user,
     }
     return JsonResponse(context)
-
-
 # 지도 테스트 용
 def map(request):
     return render(request, "articles/map.html")

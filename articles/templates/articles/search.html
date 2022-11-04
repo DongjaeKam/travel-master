@@ -64,6 +64,8 @@
   </div>
 </div>
 
+{% if request.resolver_match.url_name != 'list' %}
+
 
 <div class="row mt-2">
   <div class="col-12 my-5">
@@ -86,17 +88,23 @@
         {% if boards.has_next %}
           <li class="page-item">
             <a class="page-link" href="?searched={{ search }}&sorted={{ sort }}&p={{ boards.next_page_number }}">다음</a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#">다음</a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
-</div>
 
+          </li>
+          {% if boards.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?searched={{ search }}&p={{ boards.next_page_number }}">다음</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#">다음</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+{% endif %}
 
 {% endblock %}
 
