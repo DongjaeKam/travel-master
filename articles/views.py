@@ -130,7 +130,8 @@ def search(request):
     popular_list = {}
     if request.method == "GET":
         search = request.GET.get("searched", "")
-
+        sort = request.GET.get("sorted", "")
+        
         if not search.isdigit():
             if Review.objects.filter(
                 Q(title__icontains=search)
@@ -159,28 +160,39 @@ def search(request):
 
         if search:
             if search_list:
+                pass
 
-                page = int(request.GET.get("p", 1))
-                pagenator = Paginator(search_list, 4)
-                boards = pagenator.get_page(page)
-                return render(
-                    request,
-                    "articles/search.html",
-                    {
-                        "search": search,
-                        "boards": boards,
-                        "search_list": search_list,
-                        "popular": popular,
-                    },
-                )
-            else:
-                k = "검색 결과가 없습니다 다시 검색해주세요"
-                context = {"v": k}
-                return render(request, "articles/searchfail.html", context)
+            if sort == "pop":
+                search_list = search_list.order_by("-like_users")
+                sort="pop"
+                print(search_list)
+
+            if sort == "recent":
+                search_list = search_list.order_by("-updated_at")
+                sort="recent"
+                print(search_list)
+
+            page = int(request.GET.get("p", 1))
+            pagenator = Paginator(search_list, 5)
+            boards = pagenator.get_page(page)
+
+            return render(
+                request,
+                "articles/search.html",
+                {
+                    "search": search,
+                    "boards": boards,
+                    "search_list": search_list,
+                    "popular": popular,
+                    "sort" : sort,
+                },
+            )
         else:
             k = "검색 결과가 없습니다 다시 검색해주세요"
             context = {"v": k}
             return render(request, "articles/searchfail.html", context)
+
+
 
 
 def searchfail(request):

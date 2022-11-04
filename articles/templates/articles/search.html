@@ -31,6 +31,13 @@
   </div>
 </div>
 
+<div class="search-cate container">
+  <div class="search-cate-words">
+    <a class="search-cate-word" href="?searched={{ search }}&sorted=pop"> 인기순</a>
+    <a class="search-cate-word ms-3" href="?searched={{ search }}&sorted=recent">최신순</a>
+  </div>
+</div>
+
 <div class="container text-center">
   <div class="row justify-content-center">
     {% for board in boards %}
@@ -64,7 +71,7 @@
       <ul class="pagination justify-content-center">
         {% if boards.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?searched={{ search }}&p={{ boards.previous_page_number }}">이전</a>
+            <a class="page-link" href="?searched={{ search }}&sorted={{ sort }}&p={{ boards.previous_page_number }}">이전</a>
           </li>
         {% else %}
           <li class="page-item disabled">
@@ -78,7 +85,7 @@
         </li>
         {% if boards.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?searched={{ search }}&p={{ boards.next_page_number }}">다음</a>
+            <a class="page-link" href="?searched={{ search }}&sorted={{ sort }}&p={{ boards.next_page_number }}">다음</a>
           </li>
         {% else %}
           <li class="page-item disabled">
