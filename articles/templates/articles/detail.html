@@ -104,19 +104,26 @@
             -
             {{ comment }}</h4>
           <hr>
-          <div class="comment-user-info">
-            <img class="comment-user-image" src="{{ comment.user.profile_image.url }}" alt="">
-            <div class="comment-user-detail">
-              <h5><a href="{% url 'accounts:detail' comment.user.pk %}">{{ comment.user.profile_name }}</a></h5>
-              <h5>{{ comment.created_at }}</h5>
+
+          <div class="comment-user-info justify-content-between">
+            <div>
+              <img class="comment-user-image" src="{{ comment.user.profile_image.url }}" alt="">
+              <div class="comment-user-detail">
+                <div>
+                  <h5>{{ comment.user.profile_name }}</h5>
+                  <h5>{{ comment.created_at }}</h5>
+                </div>
+              </div>
             </div>
             {% if request.user.pk == comment.user.pk %}
-              <div id="form-comment-update-{{ comment.pk }}" style="display:none;">
-                <input id="input-{{ comment.pk }}" type="text" value="{{comment.content}}">
-                <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-{{ comment.pk }}" data-reviewup-id="{{ review.pk }}" data-commentup-id="{{ comment.pk }}">확인</button>
+              <div>
+                <div id="form-comment-update-{{ comment.pk }}" style="display:none;">
+                  <input id="input-{{ comment.pk }}" type="text" value="{{comment.content}}">
+                  <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-{{ comment.pk }}" data-reviewup-id="{{ review.pk }}" data-commentup-id="{{ comment.pk }}">확인</button>
+                </div>
+                <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-{{ comment.pk }}" data-reviewup-id="{{ review.pk }}" data-commentup-id="{{ comment.pk }}">수정</button>
+                <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-{{ comment.pk }}" data-reviewdel-id="{{ review.pk }}" data-commentdel-id="{{ comment.pk }}">삭제</button>
               </div>
-              <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-{{ comment.pk }}" data-reviewup-id="{{ review.pk }}" data-commentup-id="{{ comment.pk }}">수정</button>
-              <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-{{ comment.pk }}" data-reviewdel-id="{{ review.pk }}" data-commentdel-id="{{ comment.pk }}">삭제</button>
             {% endif %}
           </div>
         </div>
@@ -189,27 +196,34 @@
                 .data
                 .user
                 for (let i = 0; i < comment_data.length; i++) {
-                  const review_pk = response.data.review_pk
-                  console.log(comment_data[i].id, user)
+                  const review_pk = response
+                    .data
+                    .review_pk
+                    console
+                    .log(comment_data[i].id, user)
                   if (user === comment_data[i].id) {
                     comments.insertAdjacentHTML('beforeend', `
-                  <div class="comment">
-                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                    <hr>
-                    <div class="comment-user-info">
-                      <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
-                      <div class="comment-user-detail">
-                        <h5>${comment_data[i].profile_name}</h5>
-                        <h5>${comment_data[i].created_at}</h5>
+                    <div class="comment">
+                      <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                      <hr>
+                      <div class="comment-user-info justify-content-between">
+                        <div>
+                          <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                          <div class="comment-user-detail">
+                            <h5>${comment_data[i].profile_name}</h5>
+                            <h5>${comment_data[i].created_at}</h5>
+                          </div>
+                        </div>
+                        <div>
+                          <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
+                            <input class="comment-box" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
+                            <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                          </div>
+                            <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                            <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                        </div>
                       </div>
-                      <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
-                        <input class="comment-box" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
-                        <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
-                      </div>
-                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
-                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
                     </div>
-                  </div>
                   `);
                   } else {
                     comments.insertAdjacentHTML('beforeend', `
@@ -257,22 +271,26 @@
             if (user === comment_data[i].id) {
               comments.insertAdjacentHTML('beforeend', `
               <div class="comment">
-                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                    <hr>
-                    <div class="comment-user-info">
-                      <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
-                      <div class="comment-user-detail">
-                        <h5>${comment_data[i].profile_name}</h5>
-                        <h5>${comment_data[i].created_at}</h5>
-                      </div>
-                      <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
-                        <input id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
-                        <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
-                      </div>
-                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
-                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                <hr>
+                <div class="comment-user-info justify-content-between">
+                  <div>
+                    <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                    <div class="comment-user-detail">
+                      <h5>${comment_data[i].profile_name}</h5>
+                      <h5>${comment_data[i].created_at}</h5>
                     </div>
                   </div>
+                  <div>
+                    <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
+                      <input class="comment-box" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
+                      <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                    </div>
+                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                  </div>
+                </div>
+              </div>
                 `);
             } else {
               comments.insertAdjacentHTML('beforeend', `
@@ -320,22 +338,26 @@
             if (user === comment_data[i].id) {
               comments.insertAdjacentHTML('beforeend', `
               <div class="comment">
-                    <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
-                    <hr>
-                    <div class="comment-user-info">
-                      <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
-                      <div class="comment-user-detail">
-                        <h5>${comment_data[i].profile_name}</h5>
-                        <h5>${comment_data[i].created_at}</h5>
-                      </div>
-                      <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
-                        <input class="comment-box" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
-                        <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
-                      </div>
-                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
-                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
+                <hr>
+                <div class="comment-user-info justify-content-between">
+                  <div>
+                    <img class="comment-user-image" src="${comment_data[i].profile_image}" alt="">
+                    <div class="comment-user-detail">
+                      <h5>${comment_data[i].profile_name}</h5>
+                      <h5>${comment_data[i].created_at}</h5>
                     </div>
                   </div>
+                  <div>
+                    <div id="form-comment-update-${comment_data[i].commentPk}" style="display:none;">
+                      <input class="comment-form" id="input-${comment_data[i].commentPk}" type="text" value="${comment_data[i].content}">
+                      <button class="btn btn-outline-primary comment" onclick="ok_function(this)" id="okBtn-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                    </div>
+                      <button class="btn btn-outline-primary comment" onclick="update_comment(this)" id="comment-update-${comment_data[i].commentPk}" data-reviewup-id="${review_pk}" data-commentup-id="${comment_data[i].commentPk}">수정</button>
+                      <button class="btn btn-outline-danger comment" onclick="delete_comment(this)" id="comment-delete-${comment_data[i].commentPk}" data-reviewdel-id="${review_pk}" data-commentdel-id="${comment_data[i].commentPk}">삭제</button>
+                  </div>
+                </div>
+              </div>
           `);
             } else {
               comments.insertAdjacentHTML('beforeend', `

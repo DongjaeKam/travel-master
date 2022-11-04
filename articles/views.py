@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import datetime
 from django.contrib.auth import get_user_model
-
+import requests
 
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
@@ -325,36 +325,20 @@ def comment_update(request, review_pk, comment_pk):
         'user': user,
     }
     return JsonResponse(context)
-# 지도 테스트 용
-def map(request):
-    return render(request, "articles/map.html")
-    # restaurant = get_object_or_404(Restaurant, pk=pk)
-    # client_id = '7apalzu8wx';    # 본인이 할당받은 ID 입력
-    # client_pw = 'LpKKb9dnZwQUKjkeDuXDZ6n3NgeD1uN50pvk9MYj';    # 본인이 할당받은 Secret 입력
-
-    # endpoint = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
-    # url = f"{endpoint}?query={restaurant.address}"
-
-    # headers = {
-    # "X-NCP-APIGW-API-KEY-ID": '7apalzu8wx',
-    # "X-NCP-APIGW-API-KEY": 'LpKKb9dnZwQUKjkeDuXDZ6n3NgeD1uN50pvk9MYj',
-    # }
-
-    # res = requests.get(url, headers=headers)
-    # lat = str(res.json()['addresses'][0]['y'])
-    # lng = str(res.json()['addresses'][0]['x'])
-
-    # context = {
-    #     'lat' : lat,
-    #     'lng' : lng,
-    # }
-    # return render(request, 'restaurants/detail.html', context)
-
-    return render(request, "articles/map.html")
-
-
-def map2(request):
-    return render(request, "articles/map2.html")
+#지도
+def maps(request):
+    keyword = request.GET.get("keyword", "")
+    context ={
+        "keyword":keyword
+    }
+    return render(request, 'articles/maps.html',context)
+    searching = '합정 스타벅스'
+    url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query={}'.format(searching)
+    headers = {
+        "Authorization": "KakaoAK 8a99ca858d7bde82eda97b6e51f6b9c8"
+        }
+    places = requests.get(url, headers = headers).json()['documents']
+    print(places)
 
 
 # 좋아요 기능
