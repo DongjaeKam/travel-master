@@ -36,8 +36,8 @@
 
 <div class="search-cate container">
   <div class="search-cate-words">
-    <a class="search-cate-word" href="?searched={{ search }}&sorted=pop"> 인기순</a>
-    <a class="search-cate-word ms-3" href="?searched={{ search }}&sorted=recent">최신순</a>
+    <a class="search-cate-word" href="?sorted=pop"> 인기순</a>
+    <a class="search-cate-word ms-3" href="?sorted=recent">최신순</a>
   </div>
 </div>
 
@@ -47,11 +47,15 @@
     <div class="col-12 col-md-6 col-xl-4">
       <div class="search-card card">
         <div class="search-card-image-box">
-          {% for photo in board.photo_set.all  %}
-          {% if forloop.first %}
-          <img class="search-card-image" src="{{ photo.image.url }}" alt="">
+          {% if board.photo_set.all %}
+            {% for photo in board.photo_set.all  %}
+            {% if forloop.first %}
+            <img class="search-card-image" src="{{ photo.image.url }}" alt="">
+            {% endif %}
+            {% endfor %}
+          {% else %}
+            <img class="search-card-image" src="{% static 'images/noimg.jpg' %}" alt="">
           {% endif %}
-          {% endfor %}
         </div>
         <div class="card-body">
           <h4 class="card-title fw-bold m-0">{{board.title}}</h4>
@@ -67,41 +71,7 @@
   </div>
 </div>
 
-{% if request.resolver_match.url_name != 'list' %}
 
-
-<div class="row mt-2">
-  <div class="col-12 my-5">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        {% if boards.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?searched={{ search }}&sorted={{ sort }}&p={{ boards.previous_page_number }}">이전</a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#">이전</a>
-          </li>
-        {% endif %}
-        <li class="page-item">
-          <a class="page-link" href="#">{{ boards.number }}
-            /
-            {{ boards.paginator.num_pages }}</a>
-        </li>
-        {% if boards.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?searched={{ search }}&sorted={{ sort }}&p={{ boards.next_page_number }}">다음</a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <a class="page-link" href="#">다음</a>
-          </li>
-        {% endif %}
-      </ul>
-      </nav>
-    </div>
-  </div>
-{% endif %}
 
 {% endblock content %}
 

@@ -47,24 +47,32 @@
     {% block content %}
     {% endblock content %}
     
-    <footer class="py-3" style="background-color:rgb(242, 232, 225) ;">
-      <p class="text-center mb-2">Design & Made By</p>
-      <p class="text-center mb-0">DONGJAE KAM | HYUNSIK JI | JEJOON LEE | SOORAM CHO</p>
-    </footer>
+
 
     {% block script %}{% endblock script %}
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script>
-      const searchToggle = function() {
-        document.querySelector(".popular").classList.toggle('active')
-      }
     
       const search = document.querySelector(".search")
     
-      search.addEventListener('click', searchToggle)
+      search.addEventListener('click', function(event){
+        document.querySelector(".popular").classList.add('show')
+      })
+
+      const closeBtn = document.querySelector(".close-popular")
+
+      closeBtn.addEventListener('click', function(event) {
+        document.querySelector(".popular").classList.remove('show')
+      })
+
     
     </script>
+    
+    <footer class="py-3" style="background-color:rgb(242, 232, 225); margin-top:5rem;">
+      <p class="text-center mb-2">Design & Made By</p>
+      <p class="text-center mb-0">DONGJAE KAM | HYUNSIK JI | JEJOON LEE | SOORAM CHO</p>
+    </footer>
   </body>
 
   </html>

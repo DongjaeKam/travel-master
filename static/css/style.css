@@ -1,3 +1,16 @@
+/* a 링크 효과 없애기 */
+
+a{
+  color:rgb(99, 41, 0);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(36, 14, 0);
+  font-weight: bold;
+  text-decoration: none;
+}
+
 /* article.index */
 
 .theme-overlay {
@@ -87,6 +100,27 @@
   width: 80%;
 }
 
+.search-cate-words{
+  display:flex;
+  justify-content: center;
+  margin: 2rem 0 1rem 0;
+  border-top: 2px solid rgba(224, 132, 11, 0.74);
+  border-bottom: 1px solid rgb(216, 172, 115);
+}
+
+.search-cate-word{
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  color: rgb(58, 39, 14);
+}
+
+.search-cate-word:hover{
+  color: rgb(179, 120, 43);
+  font-weight: bold;
+}
+
 .popular {
   position: absolute;
   display: none;
@@ -101,7 +135,7 @@
 }
 
 
-.active {
+.show {
   display: block;
 }
 
@@ -176,6 +210,7 @@
   }
 }
 
+
 /* follow */
 
 #follow-cnt {
@@ -195,7 +230,10 @@
   margin-right: 1rem;
   width: 200px;
   height: 150px;
+  border-radius: 2%;
 }
+
+
 
 /* review.detail */
 .carousel-item {

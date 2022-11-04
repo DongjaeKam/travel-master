@@ -6,6 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import get_user_model
+from articles.models import Search
 from .forms import CustomUserModel
 from .forms import CustomUserChangeForm
 from django.contrib.auth import login as auth_login
@@ -59,6 +60,7 @@ def logout(request):
 
 # 개인 프로필 페이지
 def detail(request,pk):
+  popular_search = Search.objects.order_by("-count")[:10]
   user = get_user_model().objects.get(pk = pk)
   rank_percent = (user.rank % 10) * 10
   context = {
@@ -66,7 +68,8 @@ def detail(request,pk):
     'followers': user.followers.all(), 
     'followings': user.followings.all(),
     'reviews': user.review_set.all(),
-    'rank_percent' : rank_percent
+    'rank_percent' : rank_percent,
+    "popular": popular_search,
   }
 
   return render(request,'accounts/detail.html', context)

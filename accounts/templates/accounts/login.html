@@ -3,17 +3,17 @@
 
 {% block content %}
 
-<div class="container d-flex flex-column align-items-center col-auto">
+<div class="container my-5  d-flex flex-column align-items-center">
 
     <h1>로그인</h1>
 
-    <form action="" style="margin-top:10px;" method="POST">
+    <form action="" style="margin-top:10px;" class="d-flex flex-column" method="POST">
         {% csrf_token %}
         {% bootstrap_form form %}
         <input class='btn btn-outline-primary' type="submit" value="로그인">
     </form>
 
-    <a style="margin-top:10px;"  href ="{% url 'accounts:find_password' 1 %}" > 비밀번호를 잊으셨나요? </a>
+    <a style="margin-top:2rem;"  href ="{% url 'accounts:find_password' 1 %}" > 비밀번호를 잊으셨나요? </a>
 
 </div>
 
