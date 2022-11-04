@@ -35,10 +35,21 @@ def index(request):
 def list(request):
 
     reviews = Review.objects.all()
+    popular_search = Search.objects.order_by("-count")[:10]
+    sort = request.GET.get("sorted", "")
 
-    context = {"boards": reviews}
+    if sort == "pop":
+        reviews =  Review.objects.order_by("-like_users")
 
-    return render(request, "articles/search.html", context)
+    if sort == "recent":
+        reviews =  Review.objects.order_by("-updated_at")
+
+    context = {
+        "boards": reviews,
+        "popular" : popular_search,
+    }
+
+    return render(request, "articles/list.html", context)
 
 
 @login_required(login_url="accounts:login")
