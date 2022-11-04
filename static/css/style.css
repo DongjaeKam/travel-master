@@ -13,18 +13,27 @@ a:hover {
 
 /* article.index */
 
-.theme-overlay {
-  height: 100%;
-  width: 100%;
-}
-
-
 .index-img {
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.index-search{
+  margin-top: 1rem;
+  border-radius: 10px;
+  background-color: rgb(242, 232, 225);
+}
+
+.index-search-box{
+  padding: 1.5rem 0;
+  border-bottom: solid 1px rgba(102, 98, 95, 0.062);
+}
+
+.index-search-popular{
+  font-size: 1.4rem;
 }
 
 /* 플립 호버 시작 */
