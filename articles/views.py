@@ -140,23 +140,24 @@ def search(request):
     if request.method == "GET":
         search = request.GET.get("searched", "")
 
-        if not search.isdigit():
-            if Review.objects.filter(
-                Q(title__icontains=search)
-                | Q(content__icontains=search)
-                | Q(place__icontains=search)
-            ):
-                popular_list[search] = popular_list.get(search, 0) + 1
+        if search:
+            if not search.isdigit():
+                if Review.objects.filter(
+                    Q(title__icontains=search)
+                    | Q(content__icontains=search)
+                    | Q(place__icontains=search)
+                ):
+                    popular_list[search] = popular_list.get(search, 0) + 1
 
-        for k, v in sorted(popular_list.items(), key=lambda x: -x[1]):
-            if Search.objects.filter(title=k):
-                s = Search.objects.get(title=k)
-                s.count += 1
-                s.save()
-            else:
-                s = Search(title=k, count=v)
-                s.save()
-        popular = Search.objects.order_by("-count")[:10]
+            for k, v in sorted(popular_list.items(), key=lambda x: -x[1]):
+                if Search.objects.filter(title=k):
+                    s = Search.objects.get(title=k)
+                    s.count += 1
+                    s.save()
+                else:
+                    s = Search(title=k, count=v)
+                    s.save()
+            popular = Search.objects.order_by("-count")[:10]
 
         search_list = Review.objects.filter(
             Q(title__icontains=search)
@@ -264,7 +265,39 @@ def comment_delete(request, review_pk, comment_pk):
     }
     return JsonResponse(context)
 
-
+@login_required(login_url="accounts:login")
+def comment_update(request, review_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    comment_username = comment.user.username
+    user = request.user.pk
+    review_pk = Review.objects.get(pk=review_pk).pk
+    jsonObject = json.loads(request.body)
+    if request.method == 'POST':
+        comment.content = jsonObject.get('content')
+        comment.save()
+    temp = Comment.objects.filter(review_id=review_pk).order_by('-pk')
+    comment_data = []
+    for t in temp:
+        t.created_at = t.created_at.strftime("%Y-%m-%d %H:%M")
+        comment_data.append(
+            {
+                "id": t.user_id,
+                "userName": t.user.username,
+                "content": t.content,
+                "commentPk": t.pk,
+                "created_at": t.created_at,
+                "profile_name": t.user.profile_name,
+                "profile_image": t.user.profile_image.url,
+            }
+        )
+    context = {
+        'comment_data': comment_data,
+        'comment_pk': comment_pk,
+        'comment_username': comment_username,
+        'review_pk': review_pk,
+        'user': user,
+    }
+    return JsonResponse(context)
 # 지도 테스트 용
 def map(request):
     return render(request, "articles/map.html")
