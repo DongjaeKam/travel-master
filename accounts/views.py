@@ -111,7 +111,7 @@ def edit_profile(request,pk):
                 print('error')
 
 
-              return redirect('accounts:index')
+              return redirect('accounts:detail', user.pk)
 
       else:
           form = CustomUserChangeForm(instance=request.user)
