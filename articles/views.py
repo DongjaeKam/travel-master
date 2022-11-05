@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import datetime
 from django.contrib.auth import get_user_model
-import requests
+
 
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
