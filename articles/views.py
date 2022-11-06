@@ -11,8 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 import datetime
 from django.contrib.auth import get_user_model
-
-
+from .maps import posit
+import requests
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
     reviews = Review.objects.order_by("-like_users")[:10]
@@ -326,21 +326,15 @@ def comment_update(request, review_pk, comment_pk):
     }
     return JsonResponse(context)
 #지도
-def maps(request):
-    keyword = request.GET.get("keyword", "")
+def maps(request, y, x):
+    res = posit(x, y)
+    # print(res)
     context ={
-        "keyword":keyword
+        "res":res,
     }
-    return render(request, 'articles/maps.html',context)
-    searching = '합정 스타벅스'
-    url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query={}'.format(searching)
-    headers = {
-        "Authorization": "KakaoAK 8a99ca858d7bde82eda97b6e51f6b9c8"
-        }
-    places = requests.get(url, headers = headers).json()['documents']
-    print(places)
-
-
+    return JsonResponse(context)
+def maps2(request):
+    return render(request, "articles/maps.html")
 # 좋아요 기능
 def like(request, pk):
     review = Review.objects.get(pk=pk)

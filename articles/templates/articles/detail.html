@@ -16,23 +16,31 @@
       </div>
       <div class="popular-detail d-flex justify-content-evenly">
         <div class="area_keyword" style="">
-        {% for p in popular%}
+          {% for p in popular%}
             {% if forloop.counter <= 5 %}
-            <h6><a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}"><span class="badge text-bg-warning">{{ forloop.counter }}</span> {{p.title}}</h6></a>
+              <h6>
+                <a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}">
+                  <span class="badge text-bg-warning">{{ forloop.counter }}</span>
+                  {{p.title}}</h6>
+              </a>
             {% endif %}
-        {% endfor %}
+          {% endfor %}
         </div>
         <div class="area_keyword" style="">
-        {% for p in popular%}
+          {% for p in popular%}
             {% if forloop.counter > 5 %}
-              <h6><a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}"><span class="badge text-bg-warning">{{ forloop.counter }}</span> {{p.title}}</h6></a>
+              <h6>
+                <a class="popular-click" href="{%url 'articles:search' %}?searched={{p.title}}">
+                  <span class="badge text-bg-warning">{{ forloop.counter }}</span>
+                  {{p.title}}</h6>
+              </a>
             {% endif %}
-        {% endfor %}
+          {% endfor %}
         </div>
       </div>
     </div>
   </div>
-  
+
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner bg-dark" style="">
       {% for photo in review.photo_set.all %}
@@ -60,7 +68,8 @@
       <h4 class="review-user">
         <span class="fs-5">written by</span>
         |
-        <a class="review-user-profile-name" href="{% url 'accounts:detail' review.user.pk %}">{{ review.user.profile_name }}</a></h4>
+        <a class="review-user-profile-name" href="{% url 'accounts:detail' review.user.pk %}">{{ review.user.profile_name }}</a>
+      </h4>
       <h6 class="review-updated text-muted">{{ review.updated_at }}</h6>
       <div class="heart d-flex align-items-end">
         {% if request.user.is_authenticated %}
@@ -130,79 +139,79 @@
       {% endfor %}
     </div>
   </section>
-  {% endblock %}
+{% endblock %}
 
-  {% block script %}
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-      //좋아요 비동기
-      const likeBtn = document.querySelector('#like-btn')
+{% block script %}
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    //좋아요 비동기
+    const likeBtn = document.querySelector('#like-btn')
 
-      likeBtn.addEventListener('click', function (event) {
-        console.log(event.target.dataset)
-        axios({method: 'get', url: `/articles/${event.target.dataset.likeId}/like/`}).then(response => {
-          console.log(response.data)
-          if (response.data.isLike === true) {
-            event
-              .target
-              .classList
-              .add('bi-heart-fill')
-            event
-              .target
-              .classList
-              .remove('bi-heart')
-          } else {
-            event
-              .target
-              .classList
-              .add('bi-heart')
-            event
-              .target
-              .classList
-              .remove('bi-heart-fill')
-          }
-          const likeCount = document.querySelector('.likes')
-          likeCount.innerHTML = `
+    likeBtn.addEventListener('click', function (event) {
+      console.log(event.target.dataset)
+      axios({method: 'get', url: `/articles/${event.target.dataset.likeId}/like/`}).then(response => {
+        console.log(response.data)
+        if (response.data.isLike === true) {
+          event
+            .target
+            .classList
+            .add('bi-heart-fill')
+          event
+            .target
+            .classList
+            .remove('bi-heart')
+        } else {
+          event
+            .target
+            .classList
+            .add('bi-heart')
+          event
+            .target
+            .classList
+            .remove('bi-heart-fill')
+        }
+        const likeCount = document.querySelector('.likes')
+        likeCount.innerHTML = `
           <h6 class="likes m-0 text-muted ">| ${response.data.likeCount}명이 이 글을 좋아해요</h6>
         `
-        })
       })
-    </script>
-    <script>
-      //댓글 생성 비동기
-      const commentForm = document.querySelector('#comment-form')
-      const csrftoken = document
-        .querySelector('[name=csrfmiddlewaretoken]')
-        .value
+    })
+  </script>
+  <script>
+    //댓글 생성 비동기
+    const commentForm = document.querySelector('#comment-form')
+    const csrftoken = document
+      .querySelector('[name=csrfmiddlewaretoken]')
+      .value
 
-        commentForm
-        .addEventListener('submit', function (event) {
-          event.preventDefault();
-          axios({
-            method: 'post',
-            url: `/articles/${event.target.dataset.reviewId}/comment_create/`,
-            headers: {
-              'X-CSRFToken': csrftoken
-            },
-            data: new FormData(commentForm)
-          })
-            .then(response => {
-              console.log(response)
-              const comments = document.querySelector('#comments')
-              comments.textContent = "";
-              const hr = document.createElement('hr')
-              const comment_data = response.data.comment_data
-              const user = response
-                .data
-                .user
-                for (let i = 0; i < comment_data.length; i++) {
-                  const review_pk = response
-                    .data
-                    .review_pk
-                    console
-                    .log(comment_data[i].id, user)
-                  if (user === comment_data[i].id) {
-                    comments.insertAdjacentHTML('beforeend', `
+      commentForm
+      .addEventListener('submit', function (event) {
+        event.preventDefault();
+        axios({
+          method: 'post',
+          url: `/articles/${event.target.dataset.reviewId}/comment_create/`,
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+          data: new FormData(commentForm)
+        })
+          .then(response => {
+            console.log(response)
+            const comments = document.querySelector('#comments')
+            comments.textContent = "";
+            const hr = document.createElement('hr')
+            const comment_data = response.data.comment_data
+            const user = response
+              .data
+              .user
+              for (let i = 0; i < comment_data.length; i++) {
+                const review_pk = response
+                  .data
+                  .review_pk
+                  console
+                  .log(comment_data[i].id, user)
+                if (user === comment_data[i].id) {
+                  comments.insertAdjacentHTML('beforeend', `
                     <div class="comment">
                       <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
                       <hr>
@@ -225,8 +234,8 @@
                       </div>
                     </div>
                   `);
-                  } else {
-                    comments.insertAdjacentHTML('beforeend', `
+                } else {
+                  comments.insertAdjacentHTML('beforeend', `
                     <div class="comment">
                       <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
                       <hr>
@@ -239,37 +248,37 @@
                       </div>
                     </div>
                   `);
-                  }
                 }
-                commentForm
-                .reset()
-            })
-            .catch(console.log(1))
+              }
+              commentForm
+              .reset()
           })
-    </script>
-    <script>
-      // 댓글 삭제 비동기
-      const delete_comment = (e) => {
-        const comment_id = document
-          .querySelector(`#${e.id}`)
-          .id;
-        axios({
-          method: 'post',
-          url: `/articles/${event.target.dataset.reviewdelId}/comment_delete/${event.target.dataset.commentdelId}/delete`,
-          headers: {
-            'X-CSRFToken': csrftoken
-          }
-        }).then(response => {
-          console.log(response)
-          const comments = document.querySelector('#comments')
-          comments.textContent = "";
-          const hr = document.createElement('hr')
-          const comment_data = response.data.comment_data
-          const user = response.data.user
-          for (let i = 0; i < comment_data.length; i++) {
-            const review_pk = response.data.review_pk
-            if (user === comment_data[i].id) {
-              comments.insertAdjacentHTML('beforeend', `
+          .catch(console.log(1))
+        })
+  </script>
+  <script>
+    // 댓글 삭제 비동기
+    const delete_comment = (e) => {
+      const comment_id = document
+        .querySelector(`#${e.id}`)
+        .id;
+      axios({
+        method: 'post',
+        url: `/articles/${event.target.dataset.reviewdelId}/comment_delete/${event.target.dataset.commentdelId}/delete`,
+        headers: {
+          'X-CSRFToken': csrftoken
+        }
+      }).then(response => {
+        console.log(response)
+        const comments = document.querySelector('#comments')
+        comments.textContent = "";
+        const hr = document.createElement('hr')
+        const comment_data = response.data.comment_data
+        const user = response.data.user
+        for (let i = 0; i < comment_data.length; i++) {
+          const review_pk = response.data.review_pk
+          if (user === comment_data[i].id) {
+            comments.insertAdjacentHTML('beforeend', `
               <div class="comment">
                 <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
                 <hr>
@@ -292,8 +301,8 @@
                 </div>
               </div>
                 `);
-            } else {
-              comments.insertAdjacentHTML('beforeend', `
+          } else {
+            comments.insertAdjacentHTML('beforeend', `
               <div class="comment">
                 <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
                 <hr>
@@ -306,37 +315,37 @@
                 </div>
               </div>
                 `);
-            }
           }
-        })
-      }
-    </script>
-    <script>
-      // 댓글 수정 비동기
-      const ok_function = (e) => {
-        const commentId = event.target.dataset.commentupId
-        const reviewId = event.target.dataset.reviewupId
-        const inputCommentPk = document.querySelector(`#input-${commentId}`)
+        }
+      })
+    }
+  </script>
+  <script>
+    // 댓글 수정 비동기
+    const ok_function = (e) => {
+      const commentId = event.target.dataset.commentupId
+      const reviewId = event.target.dataset.reviewupId
+      const inputCommentPk = document.querySelector(`#input-${commentId}`)
 
-        axios({
-          method: 'post',
-          url: `/articles/${event.target.dataset.reviewupId}/comment_update/${event.target.dataset.commentupId}/update`,
-          headers: {
-            'X-CSRFToken': csrftoken
-          },
-          data: {
-            'content': inputCommentPk.value
-          }
-        }).then(response => {
-          const comments = document.querySelector('#comments')
-          comments.textContent = "";
-          const hr = document.createElement('hr')
-          const comment_data = response.data.comment_data
-          const user = response.data.user
-          for (let i = 0; i < comment_data.length; i++) {
-            const review_pk = response.data.review_pk
-            if (user === comment_data[i].id) {
-              comments.insertAdjacentHTML('beforeend', `
+      axios({
+        method: 'post',
+        url: `/articles/${event.target.dataset.reviewupId}/comment_update/${event.target.dataset.commentupId}/update`,
+        headers: {
+          'X-CSRFToken': csrftoken
+        },
+        data: {
+          'content': inputCommentPk.value
+        }
+      }).then(response => {
+        const comments = document.querySelector('#comments')
+        comments.textContent = "";
+        const hr = document.createElement('hr')
+        const comment_data = response.data.comment_data
+        const user = response.data.user
+        for (let i = 0; i < comment_data.length; i++) {
+          const review_pk = response.data.review_pk
+          if (user === comment_data[i].id) {
+            comments.insertAdjacentHTML('beforeend', `
               <div class="comment">
                 <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
                 <hr>
@@ -359,8 +368,8 @@
                 </div>
               </div>
           `);
-            } else {
-              comments.insertAdjacentHTML('beforeend', `
+          } else {
+            comments.insertAdjacentHTML('beforeend', `
               <div class="comment">
                 <h4>${comment_data[i].userName} - ${comment_data[i].content}</h4>
                 <hr>
@@ -373,22 +382,22 @@
                 </div>
               </div>
           `);
-            }
           }
-        })
+        }
+      })
 
-      }
-      const update_comment = (e) => {
-        const comment_id = document
-          .querySelector(`#${e.id}`)
-          .id
-        const input = document.createElement('input')
-        const comment = document.querySelector('#comment')
-        const span = document.createElement('span')
-        const comment_update_form = document.querySelector(`#form-${e.id}`)
-        const comment_update = document.querySelector(`#${e.id}`)
-        comment_update_form.style.display = ""
-        comment_update.style.display = "none"
-      }
-    </script>
-  {% endblock script %}
+    }
+    const update_comment = (e) => {
+      const comment_id = document
+        .querySelector(`#${e.id}`)
+        .id
+      const input = document.createElement('input')
+      const comment = document.querySelector('#comment')
+      const span = document.createElement('span')
+      const comment_update_form = document.querySelector(`#form-${e.id}`)
+      const comment_update = document.querySelector(`#${e.id}`)
+      comment_update_form.style.display = ""
+      comment_update.style.display = "none"
+    }
+  </script>
+{% endblock script %}
