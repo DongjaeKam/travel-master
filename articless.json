@@ -1,0 +1,173 @@
+[{
+  "model": "articles.review", 
+  "pk": 6,
+  "fields": {"title": "오산 물향기수목원", 
+  "content": "오산 물향기수목원에서 가을을 제대로 느꼈다.\r\n너무너무 아름다워서 사진 찍을 곳도 많다.\r\n관람동선이 있지만, 어느곳으로 가나 빙 빙돌아 결국 이어져 있었다.\r\n규모가 10만평 정도 라는데 식물로 꾸민 요소가 곳곳에 보인다.\r\n정말 힐링도 되고, 또 가고 싶다.", 
+  "created_at": "2022-11-07T16:29:35.135", 
+  "updated_at": "2022-11-07T16:29:35.316", 
+  "place": "경기도", 
+  "theme": "Healing", 
+  "user": 1, 
+  "like_users": []}}, 
+  
+  {
+  "model": "articles.review", 
+  "pk": 7, 
+  "fields": {"title": "친구들과 경주 여행", 
+  "content": "지붕 없는 박물관 경주. 경주는 그만큼 발길이 닿는 어느 곳이든 문화 유적지를 만날 수 있는 곳이다. 밤이면 더 빛나는 안압지를 비롯해 허허벌판에 자리를 굳건히 지키고 있는 첨성대. 뛰어난 건축미를 자랑하는 불국사 석굴암까지 어느 하나 빼놓을 수 없다. 경주 여행의 기록을 남기고 싶다면 스탬프 투어를 이용해보는 것도 좋다. 16곳의 명소를 탐방할 때마다 찍히는 도장 모으는 재미가 쏠쏠하다. 모바일 앱으로도 스탬프 투어 참여가 가능하다.", 
+  "created_at": "2022-11-07T16:31:30.026", 
+  "updated_at": "2022-11-07T16:31:30.254", 
+  "place": "경상도", 
+  "theme": "Healing", 
+  "user": 1, 
+  "like_users": []}}, 
+  
+  {
+  "model": "articles.review", 
+  "pk": 8, 
+  "fields": {"title": "통영 / 소매물도", 
+  "content": "나는 섬여행을 참 좋아한다. 눈길을 돌리면 어디에나 있는 바다를 볼 수 있고, 도심과는 떨어진 자연의 물씬 느낄수도 있으며 사람없는 한적한 곳에 가만히 앉아 새소리를 마음껏 들을 수 있다.\r\n내가 좋아하는 섬들 중 소매물도가 있다. 통영에서 아침 일찍 배를 타고 1시간? 정도 배를 타야한다. 그리고 한 1시간 정도 걷다 보면 모세의 기적처럼 갈라진 길이 보인다. 그리고 그 돌덩이 길을 건너게 되면 등대섬에 도착한다. \r\n바람이 정말 많이 불었고 속이 뻥 뚫리는 풍경이었다. 바람도 너무 시원했지만, 바다와 하늘이 모두 너무 파랑파랑해서 더 아름다웠다.", 
+  "created_at": "2022-11-07T16:37:51.050", 
+  "updated_at": "2022-11-07T16:37:51.271", 
+  "place": "경상도", 
+  "theme": "activity", 
+  "user": 1, 
+  "like_users": []}}, 
+  
+  {
+    "model": "articles.review", 
+    "pk": 9, 
+    "fields": {"title": "포항항ꉂꉂ(ᵔᗜᵔ*)포항항ꉂꉂ(ᵔᗜᵔ", 
+    "content": "포항 영일만 끝에 있는 호미곶에는 코스로 구성된 자전거 길이 있어서 산과 바다를 가로지르며 라이딩 할 수 있다. 죽도시장의 트렌드 마크 대게빵과 포항을 대표하는 과메기를 맛보는 것도 여행의 필수 코스! 구룡포 근대문화역사 거리에 들어서면 가슴 아픈 수탈의 흔적과 옛 추억 먹거리를 만날 수 있다.\r\n포항 갯마을 차차차 촬영지 청하시장은 5일장이 열리는 장터도 갔다왔다. 그리고 그 외에도 갯마을 차차차 촬영지를 위주로 여행코스를 짜다보니, 정말 아름다운 곳들을 많이 갔다.", 
+    "created_at": "2022-11-07T16:43:10.336", 
+    "updated_at": "2022-11-07T16:43:10.463", 
+    "place": "경상도", 
+    "theme": "Food", 
+    "user": 1, 
+    "like_users": []}}, 
+    
+  {
+    "model": "articles.review", 
+    "pk": 10, 
+    "fields": {"title": "고성 서핑", 
+    "content": "무더운 어느 여름날 다녀왔던 강원도 고성여행이다.\r\n속초나 강릉은 많이 가도 고성은 자주가는 편이 아니었는데, 이번 여행동안 좋은 곳을  너무 많이 다녀서 내 최애 여행지로 꼽히는 곳이 되었다!\r\n그리고 양양에 비해 고성은 사람들이 적어서 서핑하기 참 좋았다.\r\n서프보드를 타고서 파도의 경사진 면을 오르내리며 높이와 속도, 기술을 겨루는 스포츠로, 고도의 평형감각과 정확한 타이밍이 요구된다. 자연 그대로의 파도만을 이용하기 때문에 즐길 수 있는 장소가 한정되어 있고, 위험하지만 매력있는 레저 스포츠이다. 파도타기라고도 한다.", 
+    "created_at": "2022-11-07T16:59:21.749", 
+    "updated_at": "2022-11-07T16:59:22.034", 
+    "place": "강원도", 
+    "theme": "activity", 
+    "user": 1, 
+    "like_users": []}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 20, 
+    "fields": {"review": 6, 
+    "image": "images/KakaoTalk_20221107_162144928.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 21, 
+    "fields": {"review": 6, 
+    "image": "images/KakaoTalk_20221107_162144928_01.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 22, 
+    "fields": {"review": 6, 
+    "image": "images/KakaoTalk_20221107_162144928_02.jpg"}}, 
+  
+  {
+    "model": "articles.photo",
+    "pk": 23, 
+    "fields": {"review": 7, 
+    "image": "images/KakaoTalk_20221107_162025230.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 24, 
+    "fields": {"review": 7, 
+    "image": "images/KakaoTalk_20221107_162025230_01.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 25, 
+    "fields": {"review": 7, 
+    "image": "images/KakaoTalk_20221107_162025230_02.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 26,
+    "fields": {"review": 8, 
+    "image": "images/KakaoTalk_20221107_161900816.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 27,
+    "fields": {"review": 8, 
+    "image": "images/KakaoTalk_20221107_161900816_01.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 28, 
+    "fields": {"review": 8, 
+    "image": "images/KakaoTalk_20221107_161900816_02.jpg"}}, 
+    
+  {
+    "model": "articles.photo",
+    "pk": 29, 
+    "fields": {"review": 8, 
+    "image": "images/KakaoTalk_20221107_161900816_03.jpg"}}, 
+  
+  {
+    "model": "articles.photo", 
+    "pk": 30, 
+    "fields": {"review": 8, 
+    "image": "images/KakaoTalk_20221107_161900816_04.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 31, 
+    "fields": {"review": 9, 
+    "image": "images/KakaoTalk_20221107_161746705.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 32,
+    "fields": {"review": 9, 
+    "image": "images/KakaoTalk_20221107_161746705_01.jpg"}}, 
+  
+  {
+    "model": "articles.photo", 
+    "pk": 33, 
+    "fields": {"review": 9, 
+    "image": "images/KakaoTalk_20221107_161746705_02.jpg"}}, 
+    
+  {
+    "model": "articles.photo",
+    "pk": 34, 
+    "fields": {"review": 9, 
+    "image": "images/KakaoTalk_20221107_161746705_03.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 35, 
+    "fields": {"review": 9, 
+    "image": "images/KakaoTalk_20221107_161746705_04.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 36,
+    "fields": {"review": 10, 
+    "image": "images/KakaoTalk_20221107_161708366.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 37, 
+    "fields": {"review": 10, 
+    "image": "images/KakaoTalk_20221107_161708366_01.jpg"}}, 
+    
+  {
+    "model": "articles.photo", 
+    "pk": 38, 
+    "fields": {"review": 10, 
+    "image": "images/KakaoTalk_20221107_161708366_02.jpg"}}]
