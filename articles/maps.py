@@ -4,7 +4,7 @@ from pprint import pprint
 
 def posit(x, y):
   
-  url = f"http://apis.data.go.kr/B551011/KorService/locationBasedList?serviceKey=s7MkJZnSW39ShydkT0phKmmu6EGUJ99VBlYt9H9b2HN2N4%2BZ0s6f2QFQw4RUqeCKftr92yYeHwknWb7mOs8yUQ%3D%3D&numOfRows=1000&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=C&mapX={x}&mapY={y}&radius=10000"
+  url = f"http://apis.data.go.kr/B551011/KorService/locationBasedList?serviceKey=s7MkJZnSW39ShydkT0phKmmu6EGUJ99VBlYt9H9b2HN2N4%2BZ0s6f2QFQw4RUqeCKftr92yYeHwknWb7mOs8yUQ%3D%3D&numOfRows=10000&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=C&mapX={x}&mapY={y}&radius=10000"
   # url="http://apis.data.go.kr/B551011/KorService/locationBasedList?serviceKey=s7MkJZnSW39ShydkT0phKmmu6EGUJ99VBlYt9H9b2HN2N4%2BZ0s6f2QFQw4RUqeCKftr92yYeHwknWb7mOs8yUQ%3D%3D&numOfRows=1000&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&listYN=Y&arrange=C&mapX=127.1365699&mapY=37.5454702&radius=10000"
   payload = json.dumps({
     "response": {

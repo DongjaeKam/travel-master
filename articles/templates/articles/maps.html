@@ -8,7 +8,7 @@
   <body>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <button type="button" onclick="getCurrentPosBtn()" class="btn btn-lg btn-primary" id="getMyPositionBtn">내 위치 가져오기</button>
-    <div id="map" style="width:100%;height:750px;"></div>
+    <div id="map" style="width:100%;height:1000px;"></div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d9fda4fd5db5874a79135abda1b8db8e&libraries=services"></script>
     <script>
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -35,10 +35,25 @@
         .then(response => {
           const res = response.data.res
           console.log(res.length)
+          trip = ["A0401", "A0101", "A0302", "A0206", "A0401", "A0102", "A0207"]
           for (let i=0; i< res.length; i++){
-            if (res[i].cat1 === "A05"){
-              var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
+            if (res[i].cat2 === "A0502"){
+              if (res[i].cat3 === "A05020900"){
+                var imageSrc ="/static/images/cafe.png"
+              }
+              else{
+              var imageSrc ="/static/images/store.png"
             }
+            }
+            else if (res[i].cat2 === "B0201"){
+              var imageSrc ="/static/images/hotel.png"
+            }
+            else if (trip.includes(res[i].cat2)){
+              var imageSrc ="/static/images/trip.png"
+            }
+            else if (res[i].title.includes("공원")){
+                var imageSrc ="/static/images/park.png"
+              }
             else{
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
             }
@@ -49,8 +64,10 @@
             var marker = new kakao.maps.Marker({
               map: map, // 마커를 표시할 지도
               position:  new kakao.maps.LatLng(res[i].mapy, res[i].mapx), // 마커를 표시할 위치
-              title : [res[i].title,res[i].addr1,res[i].addr2], // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-              image : markerImage // 마커 이미지 
+              title : ["이름",res[i].title,
+              "주소",res[i].addr1 + res[i].addr2], // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+              image : markerImage, // 마커 이미지
+              
             });
           }
 
