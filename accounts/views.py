@@ -173,7 +173,6 @@ def follow(request, pk):
   return JsonResponse(data)
 
 @csrf_exempt
-
 def find_password(request,step):
 
     global code
