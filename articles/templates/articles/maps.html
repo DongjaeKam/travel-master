@@ -33,10 +33,15 @@
           url: `/articles/maps/${x}/${y}`,
         })
         .then(response => {
-          var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
           const res = response.data.res
           console.log(res.length)
           for (let i=0; i< res.length; i++){
+            if (res[i].cat1 === "A05"){
+              var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"
+            }
+            else{
+              var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+            }
             var imageSize = new kakao.maps.Size(24, 35); 
             // 마커 이미지를 생성합니다    
             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
