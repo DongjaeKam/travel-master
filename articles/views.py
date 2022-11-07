@@ -13,10 +13,10 @@ import datetime
 from django.contrib.auth import get_user_model
 from .maps import posit
 import requests
+from django.db.models import Count
 def index(request):
     popular_search = Search.objects.order_by("-count")[:10]
-    reviews = Review.objects.order_by("-like_users")[:10]
-
+    reviews = Review.objects.annotate(num_=Count("like_users")).order_by("-num_")[:10]
     pop_photos = []
     cnt = 1
 
