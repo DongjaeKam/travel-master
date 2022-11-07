@@ -83,7 +83,7 @@
           </div>
           <div class="back fs-3"><a href="{% url 'articles:search' %}?searched=activity">액티비티</a></div>
         </div>
-      </div></a>
+      </div>
       <div class="flip-box  col-4" style="">
         <div class="flip">
           <div class="front">
@@ -101,6 +101,11 @@
           <div class="back fs-3"><a href="{% url 'articles:search' %}?searched=healing">힐링</a></div>
         </div>
       </div>
+    </section>
+    <section class="row my-5">    
+      <class="col-12" style="">
+        <a href="{% url 'articles:maps2' %}"><h2>내 주변 가볼만 한곳 검색하기</h2></a>
+        <img class="index-img" src="{% static 'images/map.png' %}" alt=""  style="border-radius:2%;">
     </section>
   </main>
 
